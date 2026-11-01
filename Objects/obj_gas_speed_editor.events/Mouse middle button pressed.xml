@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="6">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 数値をキーボードから入力指定
+
+var tmp;
+
+tmp = real(get_string("Gas Speed: ", string(global.gas_speed_scale)));
+
+tmp = min( max( tmp, GAS_SPEED_SCALE_MIN ), GAS_SPEED_SCALE_MAX);
+
+global.gas_speed_scale = tmp;
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

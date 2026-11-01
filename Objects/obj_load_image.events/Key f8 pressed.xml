@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="KEYPRESS" id="119">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 背景画像を透過処理ONで読みなおす
+
+var next_id, cur_id, cur_fname, newname;
+touka = !touka;
+newname = "";
+
+cur_id = background_index[0];
+    
+cur_fname = ds_list_find_value(fname_list, global.cur_bkg_index)
+
+// 透過モードONになった場合，ファイル名に[F8]がなければ付け足す
+if( touka &amp;&amp; string_count("[F8]", filename_name(cur_fname) ) == 0 ){
+    newname = filename_path(cur_fname) + filename_change_ext(filename_name(cur_fname), "[F8]"+filename_ext(cur_fname)); 
+}
+// 透過モードOFFになった場合，ファイル名に[F8]があれば消す
+if( !touka &amp;&amp; string_count("[F8]", filename_name(cur_fname) ) &gt; 0 ){
+    newname = filename_path(cur_fname) + string_replace(filename_name(cur_fname), "[F8]", ""); 
+}
+
+// ファイル名を更新
+if( newname != "" ){
+    file_rename(cur_fname, newname);
+    ds_list_replace(fname_list, global.cur_bkg_index, newname);
+    cur_fname = newname;
+//    show_debug_message("New name = " + newname);
+}
+
+next_id = load_new_image(cur_fname, touka);
+
+//show_debug_message("Current Filename : " + cur_fname );
+
+background_index[0] = next_id;
+
+if( background_exists( cur_id ) )
+    background_delete(cur_id);
+//    global.ex_hole_num = 0;
+// 背景を前面に配置
+background_foreground[0] = touka;
+
+// 透過ONなら、追加背景を表示
+if( touka ){
+    background_visible[1] = true;
+    
+}else{
+    background_visible[1] = false;
+}
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

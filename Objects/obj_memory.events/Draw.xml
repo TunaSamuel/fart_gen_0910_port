@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="DRAW" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">event_inherited();
+
+var str;
+if( memory_mode == 0){
+  str = "Memory "+string(memory_area+1);
+  // ボタン描画
+  draw_sprite_ext(sprite_index, -1, x, y, current_scale, current_scale, 0, c_white, font_alpha);
+}
+// 記憶モード
+else if( memory_mode == 1 ){
+  str = "Mem"+string(memory_area+1)+": " + string_format((global.memory_time_max*room_speed - play_count)/room_speed, 4, 2);
+  // ボタン描画
+  draw_sprite_ext(sprite_index, -1, x, y, current_scale, current_scale, 0, c_red, font_alpha);
+  
+}
+// 再生モード
+else if( memory_mode == 2 ){
+  str = "Play"+string(memory_area+1)+": " + string_format(play_count/room_speed, 4, 2);
+  // ボタン描画
+  draw_sprite_ext(sprite_index, -1, x, y, current_scale, current_scale, 0, c_green, font_alpha);
+}
+
+
+// テキスト描画
+if( memory_mode == 0 ){
+  draw_text_ext_transformed_color(x, y, str, -1, 120,
+                current_scale, current_scale, 0, c_black, c_black, c_red, c_red, font_alpha);
+}else{
+  draw_text_ext_transformed_color(x, y, str, -1, 120,
+                current_scale, current_scale, 0, c_black, c_black, c_black, c_black, font_alpha);
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

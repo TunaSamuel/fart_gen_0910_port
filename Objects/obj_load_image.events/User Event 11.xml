@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="OTHER" id="21">
+  <actions>
+    <action id="605" library="1">
+      <!--action name: Comment-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>NONE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">画像のリロード</argument>
+      </arguments>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 背景画像を切り替える
+var next_id, cur_id, fname;
+cur_id = background_index[0];
+    
+fname = ds_list_find_value(fname_list, global.cur_bkg_index);
+next_id = load_new_image(fname, touka); //background_add(fname, touka, false);
+
+fit_window_size_to_image(next_id, global.img_scale);
+
+background_index[0] = next_id;
+
+if( background_exists( cur_id ) &amp;&amp; next_id != cur_id )
+    background_delete(cur_id);
+
+global.ex_hole_num = 0;
+
+// ファイル名に[F8]があれば，自動的に透過モードにする．無かったらノーマルモードにする
+if( ( string_count("[F8]", fname) &gt;= 1 &amp;&amp; !touka ) || ( string_count("[F8]", fname) == 0 &amp;&amp; touka ) ){
+    event_perform(ev_keypress, vk_f8);
+}
+
+// データベースにファイル名があれば、HipHoleを自動設定( このとき，[F8]は無視する
+fname = string_replace(filename_name(string(fname)), "[F8]", "");
+if( ds_hh_findname(fname) != -1 ){
+  global.hip_hole_x[global.cur_bkg_index] = real(ds_hh_getx(fname));
+  global.hip_hole_y[global.cur_bkg_index] = real(ds_hh_gety(fname));
+  
+  // ExtraHoleが存在するなら、それも設定しておきたい
+  var i, xx, yy;
+  i = 0;
+  repeat( EXTRA_HIP_HOLE_MAX ){
+    xx = real( ds_hh_getx_extra(fname, i));
+    yy = real( ds_hh_gety_extra(fname, i));
+    if( xx != 0 &amp;&amp; yy != 0 ){
+        // ExtraHoleあったので、設定する
+        global.ex_hole_x[i] = xx;
+        global.ex_hole_y[i] = yy;
+
+        i += 1;
+    }else{
+        global.ex_hole_num = i;
+        break;
+    }
+  }
+}
+  
+else{ // データベースに情報が無ければ，リストにデータを追加すべき？
+    ds_hh_add_new(fname);
+}
+
+// 表示位置をデフォルトに戻す
+global.delta_x = 0;
+global.delta_y = 0;
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

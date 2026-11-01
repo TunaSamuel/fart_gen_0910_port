@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="KEYPRESS" id="73">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">if( keyboard_check(vk_control) ){
+  draw_text_on_board("Hold SubImage", true);
+  victim_status = -1;
+
+} else {
+  // 犠牲者の表示状態を更新
+  victim_status = (victim_status + 1) mod 5;
+
+}
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

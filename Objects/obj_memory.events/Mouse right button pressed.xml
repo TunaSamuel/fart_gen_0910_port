@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="5">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 再生モードオンオフ
+
+// 何もして無ければ再生モードにする
+if( memory_mode == 0 ) {
+  memory_mode = 2;
+  play_count = 0;
+  image_blend = c_green;
+
+  draw_text_on_board("Play", true);
+  
+}
+
+// 記憶モード中ならば記憶終了
+else if( memory_mode == 1 ){
+  memory_mode = 0;
+  image_blend = c_white;
+  draw_text_on_board("Stop", true);
+}
+
+// 再生モード中ならば再生終了
+else if( memory_mode == 2 ){
+  memory_mode = 0;
+  image_blend = c_white;
+  draw_text_on_board("Stop", true);
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// iniファイルからVOICE_MAX読み込み
+ini_open(INI_FILE_NAME);
+
+voice_max = ini_read_real("Parameter", "Voice", VOICE_MAX);
+
+ini_close();
+
+// 一応0～255に設定されるように補正しとく
+voice_max = median(0, voice_max, 255);
+
+// 音声ファイルリスト作成
+var i;
+for( i = 0; i&lt;voice_max; i+=1){
+     global.list_voice[i] = ds_list_create();
+     load_sounds(".\sound\voice"+string(i+1), global.list_voice[i]);
+}
+
+// ボタンの位置
+index = 11;
+
+// ボイスは決め打ちで管理．0:off, 1:voice1, 2:voice2, 3:voice3 ...
+current_voice = 0;
+
+prev_farting_time = 0;
+prev_voice = -1;
+
+
+// エフェクト発生時に同時再生する？
+play_with_effect = true;
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

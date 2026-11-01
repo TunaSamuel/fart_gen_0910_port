@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="4">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 記憶モードオンオフ
+
+// 何もして無ければ記憶モードにする
+if( memory_mode == 0 ) {
+  var overwrite;
+  overwrite = true;
+  // 選択中の記憶領域にデータがある場合、上書きしておｋかどうか確認
+  if( !ds_map_empty( map_step_to_fartid[memory_area] ) ){
+    overwrite = show_question("[Memory "+string(memory_area+1)+"]   Recorded data exists. Overwrite?");
+  }
+
+  if( overwrite ){
+      memory_mode = 1;
+      ds_map_clear( map_step_to_fartid[memory_area] );
+      play_count = 0;
+      image_blend = c_red;
+      draw_text_on_board("Record Start", true);
+  }
+}
+
+// 記憶モード中ならば記憶終了
+else if( memory_mode == 1 ){
+  memory_mode = 0;
+  image_blend = c_white;
+  draw_text_on_board("Stop", true);
+}
+
+// 再生モード中ならば再生終了
+else if( memory_mode == 2 ){
+  memory_mode = 0;
+  image_blend = c_white;
+  draw_text_on_board("Stop", true);
+}
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="2">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">if( vacuum == false ){
+    // destroyer , attractorリセット
+    part_attractor_force(obj_gas_generator.ps, patt, 0, 0, ps_force_linear, true);
+//    part_destroyer_region(obj_gas_generator.ps, dest, 10000, 10001, 10000, 10010, ps_shape_ellipse);
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

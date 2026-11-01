@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="KEYPRESS" id="86">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// Ctrl+Vならボイスパターン切り替え
+if( keyboard_check(vk_control) ){
+  event_perform(ev_mouse, ev_left_press);
+}
+// ただのV かつ ボイス再生中でなければボイス再生
+else if( current_voice != 0 &amp;&amp; !isplaying_sound(prev_voice)){
+    if( global.voice_pitch )
+      prev_voice = play_sound(global.list_voice[current_voice-1], 0.05);
+    else
+      prev_voice = play_sound(global.list_voice[current_voice-1], 0);
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="2">
+  <actions>
+    <action id="612" library="1">
+      <!--action name: If_Variable-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>true</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_if_variable</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="EXPRESSION">loaded</argument>
+        <argument kind="EXPRESSION">true</argument>
+        <argument kind="MENU">0</argument>
+      </arguments>
+    </action>
+    <action id="422" library="1">
+      <!--action name: Start_Block-->
+      <kind>BEGIN</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>NONE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>obj_load_image</appliesTo>
+      <arguments>
+        <argument kind="STRING">
+show_message("loaded");
+// file name list
+ds_list_clear(fname_list);
+
+//bkg_index_max = i;
+bkg_index_max = load_image_names(fname_list);
+
+//global.cur_bkg_index = 0;
+background_index[0] = load_new_image(ds_list_find_value(fname_list, global.cur_bkg_index));
+
+fit_window_size_to_image( background_index[0], 1 );
+global.img_scale = 1.0;
+
+// reload sound files
+ds_list_clear(global.list_sound_small);
+ds_list_clear(global.list_sound_medium);
+ds_list_clear(global.list_sound_big);
+ds_list_clear(global.list_sound_huge);
+ds_list_clear(global.list_sound_sneaky);
+ds_list_clear(global.list_sound_special);
+
+load_sounds(".\sound\small", global.list_sound_small);
+load_sounds(".\sound\medium", global.list_sound_medium);
+load_sounds(".\sound\big", global.list_sound_big);
+load_sounds(".\sound\huge", global.list_sound_huge);
+load_sounds(".\sound\sneaky", global.list_sound_sneaky);
+load_sounds(".\sound\special", global.list_sound_special);
+
+</argument>
+      </arguments>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>obj_color_selector</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 全パーティクルの色を変更
+var i;
+
+for(i = 0; i&lt; ds_list_size(global.all_pt_list); i+=1){
+      part_type_color2( ds_list_find_value(global.all_pt_list, i), gas_color_1, gas_color_2);
+}
+
+</argument>
+      </arguments>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>obj_sound_container</appliesTo>
+      <arguments>
+        <argument kind="STRING">var ind;
+
+ind = ds_list_load("SoundConfig.dat");
+
+if( ind != -1 ){
+    ds_list_destroy(list_modpat_sound);
+    list_modpat_sound = ds_list_create();
+    list_modpat_sound = ind;
+}
+
+</argument>
+      </arguments>
+    </action>
+    <action id="611" library="1">
+      <!--action name: Variable-->
+      <kind>VARIABLE</kind>
+      <allowRelative>true</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">loaded</argument>
+        <argument kind="EXPRESSION">false</argument>
+      </arguments>
+    </action>
+    <action id="424" library="1">
+      <!--action name: End_Block-->
+      <kind>END</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>NONE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+  </actions>
+</event>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="DRAW" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">event_inherited();
+
+// 現在のモード表示
+draw_sprite_ext(sprite_index, -1, x, y, current_scale, current_scale, 0, c_white, font_alpha);
+
+draw_text_ext_transformed_color(x, y, "Size  x"+string_format(global.gas_size_scale, 4, 2), -1, 120,
+                current_scale, current_scale, 0, c_black, c_black, c_red, c_red, font_alpha);
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

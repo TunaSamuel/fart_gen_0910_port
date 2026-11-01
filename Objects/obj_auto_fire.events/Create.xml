@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">
+auto_emit = false;
+
+// 自動画像切り替え
+auto_change_image = false;
+
+fart_count = global.fart_until_changing_img;
+
+// Stepで使用するアラーム変数
+alm0 = -1;
+alm1 = -1;
+alm2 = -1;
+
+// 表示位置
+index = 3;
+
+// 放屁エフェクトの選択ルール. AllRandom, Random, Single のうちのどれか
+current_selection_rule = "Random";
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

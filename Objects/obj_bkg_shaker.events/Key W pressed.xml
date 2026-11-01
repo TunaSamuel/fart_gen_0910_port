@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="KEYPRESS" id="87">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">shakable = (shakable + 1) mod 5;
+
+if( shakable )
+    global.farting_time = 3;
+
+switch( shakable ){
+  case 0:
+    draw_text_on_board("No Shaking", true);
+    break;
+
+  case 1:
+    draw_text_on_board("Shake (Vertical)", true);
+    break;
+
+  case 2:
+    draw_text_on_board("Shake (Horizontal)", true);
+    break;
+
+  case 3:
+    draw_text_on_board("Shake (Zoom)", true);
+    break;
+
+  case 4:
+    draw_text_on_board("Shake (Random)", true);
+    break;
+
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

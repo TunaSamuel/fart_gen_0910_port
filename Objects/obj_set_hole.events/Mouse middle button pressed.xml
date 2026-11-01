@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="6">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 数値をキーボードから入力指定
+
+var tmp;
+
+switch show_menu("
+[Shake] Shake Power ("+string_format(global.shake, 3, 1)+")|
+[Shake] Shake Speed ("+string_format(global.shake_speed, 4, 2)+")|
+[Shake] Change Flag - Synchronize Fart Sound and Shaking (" +bool2string(global.shake_synchro) + ")|
+[File]  Change Flag - Search Image File Recursive ("+bool2string(global.read_recursive)+")|
+[File]  Change Image Directory (" + global.image_dir +")|
+[Help]  Change Flag - Show Infomation Message ("+bool2string(global.show_osd)+")|
+[Help]  Show Readme (F1)|
+[Image] Change Flag - Set Image Foreground (F8)|
+[Sound] Change Flag - Synchronize Fart Sound and Effect ("+bool2string(global.synchro_mode)+")"
+  ,-1) {
+  
+  case 0: // shake power
+    tmp = real(get_string("Shake Power [0 - 50]:", string(global.shake)));
+    tmp = min( max( tmp, 0 ), 50);
+    global.shake = tmp;
+
+  break;
+
+  case 1: // shake speed
+    tmp = real(get_string("Shake Speed [0 - 2):", string(global.shake_speed)));
+    tmp = min( max( tmp, 0 ), 1.99);
+    global.shake_speed = tmp;
+
+    break;
+  
+  case 2: // shake synchro mode
+    global.shake_synchro = !global.shake_synchro;
+    if( global.shake_synchro ){
+        draw_text_on_board("Shake Synchronize", true);
+    }else{
+        draw_text_on_board("Shake Constant", true);
+    }    
+    
+    break;
+    
+  case 3: // search recursive
+    global.read_recursive = !global.read_recursive;
+    if( global.read_recursive )
+        draw_text_on_board("Search Recursive", true);
+    else
+        draw_text_on_board("Search Only Indecated Directory", true);
+        
+    // ファイル読み直し
+    with( obj_load_image ){event_perform(ev_other, ev_user10 ); }
+
+    break;
+  
+  case 4: // change directory
+    with( obj_load_image )
+      event_perform( ev_keypress, vk_f2 );
+    
+    break;
+  
+  case 5: // show help message
+    if( global.show_osd ){
+        draw_text_on_board("Hide This Message", true);
+        global.show_osd = false;
+    }else{
+        global.show_osd = true;
+        draw_text_on_board("Show This Message", true);
+    }
+    break;
+  
+  case 6: // show readme
+    show_info();
+    break;
+  
+  case 7: // F8 mode
+    with( obj_load_image )
+        event_perform( ev_keypress, vk_f8 );
+    break;
+  
+  case 8: // synchro_mode
+    global.synchro_mode = !global.synchro_mode;
+    if( global.synchro_mode )
+        draw_text_on_board("Synchro Mode ON", true);
+    else
+        draw_text_on_board("Synchro Mode OFF", true);
+        
+    break;
+    
+  default:
+  break;
+  
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

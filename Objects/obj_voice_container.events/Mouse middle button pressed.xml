@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="6">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 数値をキーボードから入力指定
+
+switch show_menu("
+Set Flag - Play Voice when Farting ("+bool2string(play_with_effect)+")
+|Set Flag - Change Voice Pitch Randomly ("+bool2string(global.voice_pitch)+")"
+  ,-1) {
+  case 0: // interval max
+    play_with_effect = !play_with_effect;
+    if( play_with_effect )
+        draw_text_on_board("Play Voice when Farting", true);
+    else
+        draw_text_on_board("Not Play Voice with Farting", true);
+  break;
+  case 1: 
+    global.voice_pitch = !global.voice_pitch;
+    if( global.voice_pitch )
+        draw_text_on_board("Voice Pitch changes randomly", true);
+    else
+        draw_text_on_board("Voice Pitch doesnt change", true);
+  break;
+ 
+  default:
+  break;
+  
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

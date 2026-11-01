@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="61">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">if( global.global_mouse_available ){
+    if( ! keyboard_check(vk_control) ){
+        event_perform(ev_keypress, vk_down);
+    }else{
+        // Ctrl押されてる場合はズーム
+        global.img_scale = max(global.img_scale-0.2, IMAGE_SCALE_MIN);
+        //draw_background_ext(background_index[0], 0, 0, img_scale, img_scale, 0, c_white, 1);
+        // 背景画像を拡大するパターン
+        /*
+        background_xscale[0] = img_scale;
+        background_yscale[0] = img_scale;
+        background_x[0] = - global.hip_hole_x[global.cur_bkg_index]*img_scale + global.hip_hole_x[global.cur_bkg_index];
+        background_y[0] = - global.hip_hole_y[global.cur_bkg_index]*img_scale + global.hip_hole_y[global.cur_bkg_index];
+        */
+        // ビューを変えるパターン（ガスも大きくなるが、ボタンが見えなくなる可能性大)
+        fit_window_size_to_image(background_index[0], global.img_scale);
+    }
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

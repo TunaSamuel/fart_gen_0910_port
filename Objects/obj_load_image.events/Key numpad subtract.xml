@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="KEYBOARD" id="109">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">if( keyboard_check(vk_control) ){
+    global.img_scale = max(global.img_scale-0.05, IMAGE_SCALE_MIN);
+}
+global.img_scale = max(global.img_scale-0.05, IMAGE_SCALE_MIN);
+fit_window_size_to_image(background_index[0], global.img_scale);
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

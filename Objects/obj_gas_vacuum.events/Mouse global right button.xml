@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="51">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">    var size;
+    size = 30;
+    vacuum = true;
+    part_attractor_force(obj_gas_generator.ps, patt, 3.0, 2000, ps_force_quadratic, true);
+    part_attractor_position(obj_gas_generator.ps, patt, mouse_x, mouse_y);
+    
+    //part_destroyer_region(obj_gas_generator.ps, dest, mouse_x-size, mouse_x+size, mouse_y-size, mouse_y+size, ps_shape_ellipse);
+    //    part_destroyer_destroy_all(obj_gas_generator.ps);
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

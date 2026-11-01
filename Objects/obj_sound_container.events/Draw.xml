@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="DRAW" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">event_inherited();
+
+// 現在選択中のエフェクトに対応する効果音表示
+draw_sprite_ext(sprite_index, -1, x, y, current_scale, current_scale, 0, c_white, font_alpha);
+
+var ind, snd_name;
+ind = ds_list_find_value(list_modpat_sound, global.current_mode*GAS_PATTERN_MAX+global.current_pattern);
+snd_name = ds_map_find_value(map_listind_to_string, ind);
+
+draw_text_ext_transformed_color(x, y, "SE: " + snd_name, -1, 120,
+                current_scale, current_scale, 0, c_black, c_black, c_red, c_red, font_alpha);
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

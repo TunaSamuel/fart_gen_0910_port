@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="0">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">
+if( current_voice == 0 || isplaying_sound(prev_voice) ){
+//){
+    exit;
+}
+if( play_with_effect ){
+    if( obj_gas_generator.emit_particle[global.current_pattern] ){ // 放屁始め
+        if( global.voice_pitch )
+            prev_voice = play_sound(global.list_voice[current_voice-1], 0.05);
+        else
+            prev_voice = play_sound(global.list_voice[current_voice-1], 0.0);
+    }
+}
+
+prev_farting_time = global.farting_time;
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

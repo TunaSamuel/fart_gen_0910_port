@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="4">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 現在選択中のエフェクトの効果音を変更する
+
+var ind, value;
+
+// 
+ind = global.current_mode*GAS_PATTERN_MAX+global.current_pattern;
+
+// 現在選択中のエフェクトにヒモ付されているSEのリストのindex. これをひとつズラしたい
+value = ds_list_find_value(list_modpat_sound, ind);
+
+value = ds_map_find_next( map_listind_to_string, value );
+if( !ds_map_exists( map_listind_to_string, value ) ){
+    value = ds_map_find_first( map_listind_to_string );
+}
+
+ds_list_replace( list_modpat_sound, ind, value );
+
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

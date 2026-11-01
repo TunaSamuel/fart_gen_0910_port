@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">/*
+if( global.now_setting ){
+    image_alpha = 0.1;
+    font_alpha = 0.1;
+}else if(global.hide_button){
+    image_alpha = 0.01;
+    font_alpha = 0.01;
+}else{
+    image_alpha = 1;
+    font_alpha = 1;
+}
+*/
+
+// ボタン内でもglobal_mouse_availableが何故かtrueになる現象対策
+if( mouse_wheel_available ){
+    global.global_mouse_available = false;
+}
+
+// ボタン位置の調整
+/*
+current_scale = view_hview[0] / view_hport[0];
+
+image_xscale = current_scale;
+image_yscale = current_scale;
+
+x = view_xview[0] + 78*current_scale;
+y = view_yview[0] + 9 *(index*5-2)*current_scale;
+*/
+
+
+// マウス押し続けチェック
+if( !mouse_check_button( mb_left ) ){
+  lbutton_hold = false;
+}
+if( !mouse_check_button( mb_right ) ){
+  rbutton_hold = false;
+}
+
+if( lbutton_hold ){
+  event_perform(ev_mouse, ev_left_press);
+}
+
+if( rbutton_hold &amp;&amp; mouse_check_button( mb_right ) ){
+  event_perform(ev_mouse, ev_right_press);
+}
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

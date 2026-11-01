@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 犠牲者画像読み込み. 失敗したら犠牲者表示はしない
+var sprind;
+sprind = sprite_add("mouse_image.png", 1, true, false, 0, 0);
+if( sprind == -1 )
+  sprind = sprite_add("mouse_image.bmp", 1, true, false, 0, 0);
+
+if( sprind == -1 ){
+  draw_text_on_board("Mouse Image Not Found...", true);
+  instance_destroy();
+}
+
+sprite_index = sprind;
+sprite_set_offset( sprite_index, sprite_get_width(sprite_index) / 2, sprite_get_height(sprite_index) / 2 );
+
+// 0：マウスカーソル、１：被害者正方向、２；被害者逆方向
+victim_status=0;
+
+victim_posx = 0;
+victim_posy = 0;
+
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

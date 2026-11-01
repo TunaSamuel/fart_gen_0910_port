@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="0">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">var change;
+change = false;
+
+// オート放屁モード中は、スライドショー使用禁止
+if( obj_auto_fire.auto_emit )
+    alarm[0] = -1;
+
+// 一発ズーム
+if( super_zooming == 1 ){
+  global.img_scale *= 1.5;
+  change = true;
+}else if( super_zooming == -1 ){
+  global.img_scale *= 0.5;
+  change = true;
+}
+
+// 一発ズームの上限処理
+if( global.img_scale &gt;= IMAGE_SCALE_MAX &amp;&amp; super_zooming == 1 ){
+  sound_play(snd_hip_press);
+  global.img_scale = IMAGE_SCALE_MAX;
+  super_zooming = 0;
+} else if( global.img_scale &lt;= 1 &amp;&amp; super_zooming == -1 ){
+  global.img_scale = 1;
+  super_zooming = 0;
+}
+
+// メイン画像の表示位置設定
+if( global.now_moving ){
+    if( global.global_mouse_available ){
+        global.delta_x = mouse_x - global.from_x;
+        global.delta_y = mouse_y - global.from_y;
+        change = true;
+    }else{
+        global.now_moving = false;
+    }
+}
+background_x[0] = global.delta_x;
+background_y[0] = global.delta_y;
+
+
+// メイン画像の表示倍率指定
+if( change )
+  fit_window_size_to_image(background_index[0], global.img_scale);
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

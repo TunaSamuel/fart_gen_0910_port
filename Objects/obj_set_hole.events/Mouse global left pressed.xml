@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="53">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">if( global.now_setting &amp;&amp; global.global_mouse_available ){
+  if( keyboard_check( ord('X')) &amp;&amp; global.ex_hole_num &lt; EXTRA_HIP_HOLE_MAX ){
+     global.ex_hole_x[global.ex_hole_num] = mouse_x;
+     global.ex_hole_y[global.ex_hole_num] = mouse_y;
+     
+     // ファイル名とヒップホールを紐付け（この時[F8]は無視する
+     var fname;
+     fname = filename_name(ds_list_find_value(obj_load_image.fname_list, global.cur_bkg_index));
+     fname = string_replace(filename_name(string(fname)), "[F8]", "");
+     ds_hh_add_extra( fname, global.ex_hole_num, mouse_x, mouse_y);
+     instance_create( mouse_x, mouse_y, obj_marker_ex);
+     global.ex_hole_num += 1;
+  }else{ 
+     global.hip_hole_x[global.cur_bkg_index] = mouse_x;
+     global.hip_hole_y[global.cur_bkg_index] = mouse_y;
+     global.now_setting = false;
+
+     // 「表示中の画像名→hip hole座標」のマップ更新
+     // ファイル名とヒップホールを紐付け（この時[F8]は無視する
+      var fname;
+      fname = filename_name(ds_list_find_value(obj_load_image.fname_list, global.cur_bkg_index));
+      fname = string_replace(filename_name(string(fname)), "[F8]", "");
+      ds_hh_add(fname, mouse_x, mouse_y);
+
+/*
+      if(ds_map_exists(map_hip_hole_x, image_name)){
+          ds_map_replace(map_hip_hole_x, mouse_x, image_name);      
+      }else{
+          ds_map_add(map_hip_hole_x, mouse_x, image_name);      
+      }
+*/
+     instance_create( mouse_x, mouse_y, obj_marker);
+  }
+
+  // ここでex_hole_numの値に従ってds_hh_extra[i]のパラメータを調整する必要がある！
+  if( global.ex_hole_num &lt; EXTRA_HIP_HOLE_MAX ){
+    var fname;
+    fname = filename_name(ds_list_find_value(obj_load_image.fname_list, global.cur_bkg_index));
+    ds_hh_add_extra( fname, global.ex_hole_num, 0, 0); // (0, 0)なら、未設定ということにする
+  
+  }
+  
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

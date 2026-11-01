@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+  <resource name="spr_marker" type="RESOURCE"/>
+  <resource name="spr_window_red" type="RESOURCE"/>
+  <resource name="spr_window_white" type="RESOURCE"/>
+  <resource name="spr_window_blue" type="RESOURCE"/>
+  <resource name="spr_marker2" type="RESOURCE"/>
+  <resource name="spr_part_heart" type="RESOURCE"/>
+  <resource name="spr_part_hearts" type="RESOURCE"/>
+  <resource name="spr_window_big" type="RESOURCE"/>
+</resources>

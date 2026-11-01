@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="4">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">var col, i;
+
+col = get_color(gas_color_1);
+if( col != -1 ) gas_color_1 = col;
+
+col = get_color(gas_color_2);
+if( col != -1 ) gas_color_2 = col;
+
+// 全パーティクルの色を変更
+//var i,col1, col2, r, g, b;
+
+for(i = 0; i&lt; ds_list_size(global.all_pt_list); i+=1){
+  set_pt_color2( ds_list_find_value(global.all_pt_list, i), gas_color_1, gas_color_2);
+/*
+      r = color_get_red(gas_color_1) * (random(0.2)+0.9); // 90% ～ 110%
+      g = color_get_green(gas_color_1) * (random(0.2)+0.9); // 90% ～ 110%
+      b = color_get_blue(gas_color_1) * (random(0.2)+0.9); // 90% ～ 110%
+      r = max( min(255, r), 0 );
+      g = max( min(255, g), 0 );
+      b = max( min(255, b), 0 );
+      col1 = make_color_rgb(r, g, b);
+      
+      r = color_get_red(gas_color_2) * (random(0.2)+0.9); // 90% ～ 110%
+      g = color_get_green(gas_color_2) * (random(0.2)+0.9); // 90% ～ 110%
+      b = color_get_blue(gas_color_2) * (random(0.2)+0.9); // 90% ～ 110%
+      r = max( min(255, r), 0 );
+      g = max( min(255, g), 0 );
+      b = max( min(255, b), 0 );
+      col2 = make_color_rgb(r, g, b);
+      
+      part_type_color2( ds_list_find_value(global.all_pt_list, i), col1, col2);
+*/
+
+}
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

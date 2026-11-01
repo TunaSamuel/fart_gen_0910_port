@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="OTHER" id="4">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">var fname;
+
+event_perform( ev_other, ev_user11 );
+
+/*
+fname = ds_list_find_value(fname_list, global.cur_bkg_index);
+
+// ファイル名に[F8]があれば，自動的に透過モードにする．無かったらノーマルモードにする
+if( ( string_count("[F8]", fname) &gt;= 1 &amp;&amp; !touka ) || ( string_count("[F8]", fname) == 0 &amp;&amp; touka ) ){
+    event_perform(ev_keypress, vk_f8);
+}
+
+// データベースにファイル名があれば、HipHoleを自動設定( このとき，[F8]は無視する
+fname = string_replace(filename_name(string(fname)), "[F8]", "");
+if( ds_hh_findname(fname) != -1 ){
+  global.hip_hole_x[global.cur_bkg_index] = real(ds_hh_getx(fname));
+  global.hip_hole_y[global.cur_bkg_index] = real(ds_hh_gety(fname));
+  
+  // ExtraHoleが存在するなら、それも設定しておきたい
+  var i, xx, yy;
+  i = 0;
+  repeat( EXTRA_HIP_HOLE_MAX ){
+    xx = real( ds_hh_getx_extra(fname, i));
+    yy = real( ds_hh_gety_extra(fname, i));
+    if( xx != 0 &amp;&amp; yy != 0 ){
+        // ExtraHoleあったので、設定する
+        global.ex_hole_x[i] = xx;
+        global.ex_hole_y[i] = yy;
+
+        i += 1;
+    }else{
+        global.ex_hole_num = i;
+        break;
+    }
+  }
+}
+*/
+/*
+// データベースにファイル名があれば、HipHoleを自動設定
+fname = filename_name(string(fname));
+if( ds_hh_findname(fname) != -1 ){
+  global.hip_hole_x[global.cur_bkg_index] = real(ds_hh_getx(fname));
+  global.hip_hole_y[global.cur_bkg_index] = real(ds_hh_gety(fname));
+}
+*/
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

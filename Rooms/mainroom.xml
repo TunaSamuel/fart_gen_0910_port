@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<room>
+  <caption>Fart Generator</caption>
+  <size height="768" width="1024"/>
+  <grid>
+    <isometric>false</isometric>
+    <snap x="32" y="32"/>
+  </grid>
+  <speed>30</speed>
+  <persistent>false</persistent>
+  <creationCode>show_debug_message("room creation code called");
+
+var iniwid, inihei, inix, iniy;
+
+ini_open(INI_FILE_NAME);
+
+iniwid = ini_read_real("Form", "Width", 1920);//1024);
+inihei = ini_read_real("Form", "Height", 1200);//768);
+inix = ini_read_real("Form", "Left", window_get_x());
+iniy = ini_read_real("Form", "Top",  window_get_y());
+room_speed = ini_read_real("Effect", "Fps", 30);
+
+ini_close();
+
+window_set_rectangle( inix, iniy, iniwid, inihei );
+
+room_set_width(room, iniwid);
+room_set_height(room, inihei);
+
+view_wport[0] = room_width;
+view_hport[0] = room_height;
+
+//background_index[0] = initial_bg;
+fit_window_size_to_image(background_index[0], 1);
+
+if( global.room_restarted == 0 ){
+  global.room_restarted = 1;
+  room_restart();
+}
+
+var btnnum, top, left;
+
+// 画像エリアのビュー
+btnnum = global.button_index;
+//btnnum = 11;
+top = BUTTON_ORIGIN_Y - global.button_height/2;
+left = BUTTON_ORIGIN_X - global.button_width/2;
+
+view_xview[1] = left;
+view_yview[1] = top;
+view_wview[1] = global.button_width;
+view_hview[1] = btnnum*global.button_height;
+view_xport[1] = 0;
+view_yport[1] = 0;
+view_wport[1] = view_wview[1];
+view_hport[1] = view_hview[1];        
+view_visible[1] = true;
+
+
+// ボタンエリアのビュー
+
+top = DEBUG_BUTTON_ORIGIN_X - global.button_height/2;
+left = DEBUG_BUTTON_ORIGIN_Y - global.button_width/2;
+/*
+view_xview[2] = left;
+view_yview[2] = top;
+view_wview[2] = 316;
+view_hview[2] = 36;
+view_xport[2] = 0;
+view_yport[2] = inihei - view_hview[2];
+view_wport[2] = view_wview[2];
+view_hport[2] = view_hview[2];
+
+
+if( global.debug ){
+  view_visible[2] = true;
+}
+*/
+
+// メッセージウィンドウの初期設定
+message_alpha(0.7);</creationCode>
+  <backgroundColor>C0C0C0</backgroundColor>
+  <drawBackgroundColor>true</drawBackgroundColor>
+  <clearViewBackground>true</clearViewBackground>
+  <backgrounds>
+    <backgroundDef>
+      <visibleOnRoomStart>true</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>false</tileHorizontally>
+      <tileVertically>false</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+    <backgroundDef>
+      <visibleOnRoomStart>false</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>true</tileHorizontally>
+      <tileVertically>true</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+    <backgroundDef>
+      <visibleOnRoomStart>false</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>true</tileHorizontally>
+      <tileVertically>true</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+    <backgroundDef>
+      <visibleOnRoomStart>false</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>true</tileHorizontally>
+      <tileVertically>true</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+    <backgroundDef>
+      <visibleOnRoomStart>false</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>true</tileHorizontally>
+      <tileVertically>true</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+    <backgroundDef>
+      <visibleOnRoomStart>false</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>true</tileHorizontally>
+      <tileVertically>true</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+    <backgroundDef>
+      <visibleOnRoomStart>false</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>true</tileHorizontally>
+      <tileVertically>true</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+    <backgroundDef>
+      <visibleOnRoomStart>false</visibleOnRoomStart>
+      <isForeground>false</isForeground>
+      <backgroundImage/>
+      <offset x="0" y="0"/>
+      <speed x="0" y="0"/>
+      <tileHorizontally>true</tileHorizontally>
+      <tileVertically>true</tileVertically>
+      <stretch>false</stretch>
+    </backgroundDef>
+  </backgrounds>
+  <enableViews>false</enableViews>
+  <instances>
+    <instance>
+      <object>obj_gas_generator</object>
+      <position x="162" y="0"/>
+      <creationCode>initialize_game();</creationCode>
+      <locked>false</locked>
+    </instance>
+    <instance>
+      <object>obj_bkg_shaker</object>
+      <position x="180" y="0"/>
+      <creationCode/>
+      <locked>false</locked>
+    </instance>
+    <instance>
+      <object>obj_extra_part_generator</object>
+      <position x="198" y="0"/>
+      <creationCode/>
+      <locked>false</locked>
+    </instance>
+    <instance>
+      <object>obj_mouse_image</object>
+      <position x="216" y="0"/>
+      <creationCode/>
+      <locked>false</locked>
+    </instance>
+  </instances>
+  <tiles/>
+  <editorSettings remember="false"/>
+</room>

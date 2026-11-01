@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">if( victim_status == 0 ) // 表示しない
+{
+  visible = false;
+  window_set_cursor(cr_default);
+
+} else if( victim_status &gt; 0 ){ // マウスカーソル位置に表示
+  visible = true;
+  window_set_cursor(cr_none);
+
+  image_xscale = ((victim_status mod 2) - 0.5) * 2; 
+  image_yscale = ((victim_status &lt; 3 ) - 0.5) * 2; 
+
+  victim_posx = mouse_x;
+  victim_posy = mouse_y;
+  self.x = victim_posx;
+  self.y = victim_posy;
+
+  // パーティクル存在してたら悶える
+  if( part_particles_count(obj_gas_generator.ps) ){
+    self.x += random(20)-10;
+    self.y += random(20)-10;
+  }
+}else{ // 固定位置に表示
+  window_set_cursor(cr_default);
+  self.x = victim_posx;
+  self.y = victim_posy;
+
+  // パーティクル存在してたら悶える
+  if( part_particles_count(obj_gas_generator.ps) ){
+    self.x += random(20)-10;
+    self.y += random(20)-10;
+  }
+}
+
+// ボタンエリアに入ったら，固定位置に表示してなければ表示を戻す
+if( !global.global_mouse_available &amp;&amp; victim_status &gt; 0 ) {
+  window_set_cursor(cr_default);
+  victim_status = 0;
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

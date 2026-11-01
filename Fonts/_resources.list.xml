@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+  <resource name="font_text" type="RESOURCE"/>
+  <resource name="font_digit" type="RESOURCE"/>
+  <resource name="font_text_big" type="RESOURCE"/>
+  <resource name="font_debug" type="RESOURCE"/>
+</resources>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">{
+  ini_open(INI_FILE_NAME);
+  
+  global.debug = ini_read_real("Parameter", "Debug", 0);
+  
+  ini_close();
+
+  if( global.debug &lt; 2 ){
+    instance_destroy();
+  }
+
+  var ind;
+
+  // エキストラ用パーティクルシステム
+  ps2 = part_system_create();
+  part_system_depth(ps2, -0.9);
+  part_system_draw_order(ps2, false);
+
+  // エミッタを作成する
+  extra_em = part_emitter_create(ps2);
+
+  // アトラクタを作成する
+  extra_at = part_attractor_create(ps2);
+
+  // 複数同時発射用。中止
+/*
+  for( ind=0; ind&lt;EXTRA_HIP_HOLE_MAX; ind+=1){
+    extra_at_multi[ind] = part_attractor_create(ps2);
+  }
+*/
+
+  // デストロイヤを作成する
+  extra_de = part_destroyer_create(ps2);
+
+  // チェンジャを作成する
+  extra_ch1 = part_changer_create(ps2);
+  extra_ch2 = part_changer_create(ps2);
+  extra_ch3 = part_changer_create(ps2);
+  extra_ch4 = part_changer_create(ps2);
+ 
+  // パーティクル作成
+  pt_heart = create_heart_pt(ps2, 3.25, -0.06, 0.5*room_speed, 5, -0.3, 0, 360);
+
+  pt_soul_pink  = create_soul_pt(ps2, 2, 0, 5*room_speed, 8, -0.3, 0, 360,
+   c_fuchsia);
+
+  pt_soul_yellow  = create_soul_pt(ps2, 2, 0, 5*room_speed, 8, -0.3, 0, 360,
+   c_yellow);
+
+  pt_soul_blue  = create_soul_pt(ps2, 2, 0, 5*room_speed, 8, -0.3, 0, 360,
+   c_aqua);
+
+  pt_soul_slow  = create_soul_pt(ps2, 2, -0.05, 5*room_speed, 0, -0.1, 0, 0,
+   c_white);
+
+  pt_air = create_soul_pt(ps2, 4, 0, 5*room_speed, 4, -0.3, 0, 360, c_aqua);
+  part_type_alpha2(pt_air, 0.5, 0.3);
+  pt_air_slow = create_soul_pt(ps2, 4, -0.1, 5*room_speed, 0, -0.2, 0, 360, c_aqua);
+
+  // チェンジャ設定
+  part_changer_types(ps2, extra_ch1, pt_soul_pink, pt_soul_slow);
+  part_changer_types(ps2, extra_ch2, pt_soul_yellow, pt_soul_slow);
+  part_changer_types(ps2, extra_ch3, pt_soul_blue, pt_soul_slow);
+  part_changer_types(ps2, extra_ch4, pt_air, pt_air_slow);
+  part_changer_kind(ps2, extra_ch1, ps_change_motion );
+  part_changer_kind(ps2, extra_ch2, ps_change_motion );
+  part_changer_kind(ps2, extra_ch3, ps_change_motion );
+  part_changer_kind(ps2, extra_ch4, ps_change_motion );
+
+  // パーティクル放出フラグ
+  emit_soul = false;
+  emit_air = false;
+
+}
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

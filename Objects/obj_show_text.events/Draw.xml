@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="DRAW" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">draw_set_font( font_text_big );
+draw_set_halign(fa_right);
+
+// テキスト描画
+draw_text_ext_transformed_color(x+2, y+2, disp_text, -1, 1000,
+                1, 1, 0, c_white, c_white, c_white, c_white, disp_time / room_speed);
+
+draw_text_ext_transformed_color(x, y, disp_text, -1, 1000,
+                1, 1, 0, c_black, c_black, c_blue, c_blue, disp_time / room_speed);
+
+
+//show_debug_message("draw!!!" + disp_text);
+
+draw_set_font( font_text );
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

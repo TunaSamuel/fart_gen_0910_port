@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="1">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// StepEventでアラーム処理する。
+
+// Alarm0
+if( alm0 == 0 ){
+    // アラーム発動したら、発射して待機時間をalarm[1]にセット
+    if( auto_emit ){
+        
+        // 選択ルールに従って放屁エフェクトの種類を決定
+        if( current_selection_rule == "AllRandom" ){
+            global.current_pattern = floor(random( GAS_PATTERN_MAX ));
+            global.current_mode = floor(random( EMIT_MODE_MAX ));
+        }else if( current_selection_rule == "Random"){
+            global.current_pattern = floor(random( GAS_PATTERN_MAX ));
+        }else{
+        
+        }
+        if( auto_change_image )
+            fart_count -= 1;
+    
+        obj_gas_generator.emit_particle[global.current_pattern] = true;
+    
+//        alarm[1] = random( global.emit_time_max - global.emit_time_min ) + global.emit_time_min;
+        alm1 = random( global.emit_time_max - global.emit_time_min ) + global.emit_time_min;
+    }
+}
+
+// Alarm1
+if( alm1 == 0 ){
+    // シンクロモード中は、alm1 == 0になってもすぐに止めず、音が止むまで待機
+    if( global.synchro_mode &amp;&amp; isplaying_sound(global.prev_fart_sound)){
+        alm1 = 10;
+    }
+
+    // アラーム発動したら、放屁をやめて待機時間をalarm[0]にセット
+    else if( auto_emit ){
+    //    obj_gas_generator.emit_particle[gas_pattern] = false;
+        global.farting_time = 0;
+    
+        // 自動画像切り替えモードONなら，放屁回数に従って適当にChangeImgを呼ぶ
+        if( auto_change_image &amp;&amp; fart_count &lt;= 0 ){
+            fart_count = global.fart_until_changing_img;
+//            alarm[2] = global.emit_interval_min;
+            alm2 = global.emit_interval_min;
+        }
+        else
+//            alarm[0] = random( global.emit_interval_max - global.emit_interval_min ) + global.emit_interval_min;
+            alm0 = random( global.emit_interval_max - global.emit_interval_min ) + global.emit_interval_min;
+    }
+}
+
+// Alarm2
+if( alm2 == 0 ){
+    // アラーム発動したら、画像を切り替えてalarm[0]に待機時間をセット
+    if( auto_emit ){
+        with(obj_load_image){
+            event_perform(ev_keypress, vk_up);
+        }
+//        alarm[0] = random( global.emit_interval_max - global.emit_interval_min ) + global.emit_interval_min;   
+        alm0 = random( global.emit_interval_max - global.emit_interval_min ) + global.emit_interval_min;   
+    }
+
+}
+
+// Alarm decrement
+if( alm0 &gt;= -1 ) alm0 = ceil( alm0 - 1 );
+if( alm1 &gt;= -1 ) alm1 = ceil( alm1 - 1 );
+if( alm2 &gt;= -1 ) alm2 = ceil( alm2 - 1 );
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

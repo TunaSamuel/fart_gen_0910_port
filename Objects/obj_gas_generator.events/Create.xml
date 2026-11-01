@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">{
+  // パーティクルシステムを作成する
+  ps = part_system_create();
+  part_system_depth(ps, -1);
+  part_system_draw_order(ps, false);
+  
+  var ind;
+  ind=0;
+  
+  pt_gas_id = -1;
+  
+  // テンキー数字を普通の数字キーと対応させる
+  keyboard_set_map(vk_numpad0, ord('0'));
+  keyboard_set_map(vk_numpad1, ord('1'));
+  keyboard_set_map(vk_numpad2, ord('2'));
+  keyboard_set_map(vk_numpad3, ord('3'));
+  keyboard_set_map(vk_numpad4, ord('4'));
+  keyboard_set_map(vk_numpad5, ord('5'));
+  keyboard_set_map(vk_numpad6, ord('6'));
+  keyboard_set_map(vk_numpad7, ord('7'));
+  keyboard_set_map(vk_numpad8, ord('8'));
+  keyboard_set_map(vk_numpad9, ord('9'));
+
+  // ホイールクリックできない場合に備え，F7キーをmiddle clickに割り当て
+  keyboard_set_map(mb_middle, vk_f7);
+  
+  // 放出するガスの種類及び弾数をまとめたスタック
+  stack_gas = ds_stack_create();
+  stack_gas_num = ds_stack_create();
+
+  // 全パーティクルのリスト．色変更時等に利用．
+  global.all_pt_list = ds_list_create();
+  
+  // 現在のガスモード 　(Shot, Mist, Burst, Hybridとか）
+  global.current_mode = 0;
+
+  // 最後に発射したパターン
+  global.current_pattern = 1;
+  
+  // ガスエフェクトのサイズ倍率
+  global.gas_size_scale = 2.0;
+    
+  // ガスエフェクトの個数倍率
+  global.gas_num_scale = 2.0;
+  
+  // マウスで方向指定できるガスエフェクトの速度倍率
+  global.gas_speed_scale = 2.0;
+  
+  // 放屁量の倍率
+  global.gas_amount_scale = 1.0;
+
+  // 放出中のガスの持続時間（フレーム）
+  global.farting_time = 0;
+  
+  // リストのインデックスとパーティクルindの対応を取るためのマップ
+  map_ptind_to_listind = ds_map_create();
+  
+  // パーティクルindに対応したsize_incrデフォルト値を保存するリスト
+  list_pt_sizeincr = ds_list_create();
+
+  // パーティクルindに対応したlifeデフォルト値を保存するリスト
+  list_pt_life = ds_list_create();
+  
+  // 発射方向を反転するか？
+  reverse_shot = false;
+  
+  // create_***_pt(ps, size, size_incr, life, speed, friction, direction, range)
+  // ショット系
+  pt_machinegun = create_shot_pt(ps, 0.1, 0.06, 1.7*room_speed, 15, -0.2, 10, 360);
+  ds_list_add(list_pt_sizeincr, 0.06)
+  ds_list_add(list_pt_life, 1.7*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_machinegun, ind);
+  ind+=1;
+
+  pt_shotgun    = create_shot_pt(ps, 0.1, 0.06, room_speed, 15, -0.2, 2, 360);
+  ds_list_add(list_pt_sizeincr, 0.06);
+  ds_list_add(list_pt_life,  room_speed);
+  ds_map_add(map_ptind_to_listind, pt_shotgun, ind);
+  ind+=1;
+  
+  pt_ryfle      = create_shot_pt(ps, 0.1, 0.06, 2.7*room_speed, 20, -0.2, 0, 5);
+  ds_list_add(list_pt_sizeincr, 0.06);
+  ds_list_add(list_pt_life, 2.7*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_ryfle, ind);
+  ind+=1;
+  
+  pt_weak_shot = create_shot2_pt(ps, 0.1, 0.06, 1.4*room_speed, 15, -0.2, 2, 360);
+  ds_list_add(list_pt_sizeincr, 0.06);
+  ds_list_add(list_pt_life, 1.4*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_weak_shot, ind);
+  ind+=1;
+  
+  // ガス欠
+  pt_gaslack      = create_gaslack_pt(ps, 0.1, 0.02, 1.4*room_speed, 10, -0.1, 0, 5);
+  ds_list_add(list_pt_sizeincr, 0.02);
+  ds_list_add(list_pt_life, 1.4*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_gaslack, ind);
+  ind+=1;
+
+  
+  // ミスト系
+  pt_mist       = create_mist_pt(ps, 0.1, 0.1, 2*room_speed, 10, -0.1, 0, 30);
+  ds_list_add(list_pt_sizeincr, 0.1);
+  ds_list_add(list_pt_life, 2*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_mist, ind);
+  ind+=1;
+  
+  pt_storm      = create_mist_pt(ps, 0.1, 0.15, 3.3*room_speed, 1, -0.2, 0, 30);
+  ds_list_add(list_pt_sizeincr, 0.15);
+  ds_list_add(list_pt_life, 3.3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_storm, ind);
+  ind+=1;
+  
+  pt_atmosphere = create_mist_pt(ps, 0.1, 0.25, 4.7*room_speed, 1, -0.2, 0, 30);
+  ds_list_add(list_pt_sizeincr,  0.25);
+  ds_list_add(list_pt_life, 4.7*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_atmosphere, ind);
+  ind+=1;
+
+  pt_explode    = create_mist2_pt(ps, 0.1, 0.5, 1.3*room_speed, 1, -0.2, 0, 30);
+  ds_list_add(list_pt_sizeincr,  0.5);
+  ds_list_add(list_pt_life, 1.3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_explode, ind);
+  ind+=1;
+ 
+  pt_weak_mist      = create_mist2_pt(ps, 0.1, 0.15, 2.4*room_speed, 1, -0.2, 0, 30);
+  ds_list_add(list_pt_sizeincr, 0.15);
+  ds_list_add(list_pt_life, 2.4*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_weak_mist, ind);
+  ind+=1;
+  
+  pt_weak_atmosphere = create_mist2_pt(ps, 0.1, 0.25, 4*room_speed, 1, -0.2, 0, 180);
+  ds_list_add(list_pt_sizeincr, 0.25);
+  ds_list_add(list_pt_life, 4*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_weak_atmosphere, ind);
+  ind+=1;
+  
+  // ローリング系
+  pt_rolling_fast = create_rolling_pt(ps, 0.1, 0.6, 0.3*room_speed, 1, -0.1, 0, 30);
+  ds_list_add(list_pt_sizeincr,  0.6);
+  ds_list_add(list_pt_life, 0.3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_rolling_fast, ind);
+  ind+=1;
+
+  pt_rolling = create_rolling_pt(ps, 0.1, 0.1, 1*room_speed, 1, -0.2, 0, 30);
+  ds_list_add(list_pt_sizeincr,  0.1);
+  ds_list_add(list_pt_life, 1*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_rolling, ind);
+  ind+=1;
+  
+  // スモッグ
+  pt_smog_huge = create_smog_pt(ps, 0.1, 0.15, 5*room_speed, 1, -0.2, 0, 30);
+  ds_list_add(list_pt_sizeincr,  0.1);
+  ds_list_add(list_pt_life, 3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_smog_huge, ind);
+  ind+=1;
+
+  pt_smog = create_smog_pt(ps, 0.1, 0.2, 3*room_speed, 1, -0.2, 0, 30);
+  ds_list_add(list_pt_sizeincr,  0.2);
+  ds_list_add(list_pt_life, 1*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_smog, ind);
+  ind+=1;
+
+  // バースト系
+  pt_burst1     = create_burst_pt(ps, 0.1, 0.05, 3*room_speed, 6, -0.25, 0, 3*room_speed, 0);
+  part_type_gravity(pt_burst1, 0.2, 0);
+  ds_list_add(list_pt_sizeincr,  0.05);
+  ds_list_add(list_pt_life, 3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_burst1, ind);
+  ind+=1;
+
+  pt_burst2     = create_burst_pt(ps, 0.1, 0.05, 3*room_speed, 6, -0.15, 0, 360, 0);
+  ds_list_add(list_pt_sizeincr,  0.05);
+  ds_list_add(list_pt_life, 3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_burst2, ind);
+  ind+=1;
+  
+  pt_weak_burst     = create_burst2_pt(ps, 0.1, 0.05, 3*room_speed, 4, -0.05, 0, 80, 0);
+  ds_list_add(list_pt_sizeincr,  0.05);
+  ds_list_add(list_pt_life, 3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_weak_burst, ind);
+  ind+=1;
+  
+  pt_laserburst = create_burst_pt(ps, 0.1, 0.05, 3*room_speed, 10, -0.05, 0, 5, 0);
+  ds_list_add(list_pt_sizeincr,  0.05);
+  ds_list_add(list_pt_life, 3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_laserburst, ind);
+  ind+=1;
+  
+  pt_starburst1 = create_burst_pt(ps, 0.1, 0.05, 3*room_speed, 10, -0.05, 30, 30, 0.3);
+  ds_list_add(list_pt_sizeincr,  0.05);
+  ds_list_add(list_pt_life, 3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_starburst1, ind);
+  ind+=1;
+  
+  pt_starburst2 = create_burst_pt(ps, 0.1, 0.05, 3*room_speed, 10, -0.05, 30, 30, -0.3);
+  ds_list_add(list_pt_sizeincr,  0.05);
+  ds_list_add(list_pt_life, 3*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_starburst1, ind);
+  ind+=1;
+
+  // 火炎
+  pt_fire = create_fire_pt();
+  ds_list_add(list_pt_sizeincr, 0.04);
+  ds_list_add(list_pt_life, 2.4*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_fire, ind);
+  ind+=1;
+    
+  // シンプルなエフェクト
+  pt_simple = create_simple_pt(ps, 0.1, 0.1, 0.4*room_speed, 1, -0.1, 0, 360);
+  ds_list_add(list_pt_sizeincr, 0.3);
+  ds_list_add(list_pt_life, 0.4*room_speed);
+  ds_map_add(map_ptind_to_listind, pt_simple, ind);
+  ind+=1;
+
+    // エミッタを作成する
+  hip_em = part_emitter_create(ps);
+ 
+  // 複数同時発射用
+  for( ind=0; ind&lt;EXTRA_HIP_HOLE_MAX; ind+=1){
+    hip_em_ex[ind] = part_emitter_create(ps);
+  }
+
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="6">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 数値をキーボードから入力指定
+
+switch show_menu("
+Set Flag - Change Fart Sound Pitch Randomly ("+bool2string(global.fart_sound_pitch)+")"
+  ,-1) {
+  case 0: // interval max
+    global.fart_sound_pitch = !global.fart_sound_pitch;
+    if( global.fart_sound_pitch )
+        draw_text_on_board("Fart Sound Pitch changes randomly", true);
+    else
+        draw_text_on_board("Fart Sound Pitch doesnt change", true);
+  break;
+ 
+  default:
+  break;
+  
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

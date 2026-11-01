@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="0">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 記憶モード
+if( memory_mode == 1 ){
+  var fartid;
+
+  // 放屁中ならば、エフェクトの種類を記録
+  if( global.farting_time != 0 ){
+    fartid = global.current_mode * 100;
+    fartid += global.current_pattern;
+
+    ds_map_add(map_step_to_fartid[memory_area], play_count, fartid);
+  }
+
+  play_count += 1;
+
+  // 記憶カウントが終了した場合
+  if( play_count &gt;= global.memory_time_max*room_speed ){
+    play_count = 0;
+    memory_mode = 0;
+  }
+}
+// 再生モード
+if( memory_mode == 2 ){
+  var fartid;
+
+  if( ds_map_exists(map_step_to_fartid[memory_area], play_count) ){
+    fartid = ds_map_find_value(map_step_to_fartid[memory_area], play_count);
+
+    global.current_mode = floor(fartid/100);
+    global.current_pattern = fartid mod 100;
+
+    keyboard_key_press(vk_space);
+  }else{
+    keyboard_key_release(vk_space);
+  }
+
+  play_count += 1;
+
+  // 再生カウントが終了した場合
+  if( play_count &gt;= global.memory_time_max*room_speed ){
+    play_count = 0;
+    //memory_mode = 0;
+    keyboard_key_release(vk_space);
+  }
+}
+
+// Ctrl+数字キーで再生
+if( memory_mode == 0 &amp;&amp; keyboard_check(vk_control) ){
+  var i;
+  for(i=0; i&lt;min(10, MEMORY_AREA_MAX); i+=1){
+    if( keyboard_check_pressed(ord(string(i))) ){
+      memory_area = i;
+      memory_mode = 2;
+      break;      
+    }
+  }
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

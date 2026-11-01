@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="MOUSE" id="6">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">// 数値をキーボードから入力指定
+
+var tmp, item1, item2, item3;
+item1 = 0;
+item2 = 5;
+item3 = 10;
+switch show_menu("
+Fart Interval Max ("+string_format(global.emit_interval_max/room_speed, 4, 2)+" sec)|
+Fart Interval Min ("+string_format(global.emit_interval_min/room_speed, 4, 2)+" sec)|
+Fart Emitting Time Max ("+string_format(global.emit_time_max/room_speed, 4, 2)+" sec)|
+Fart Emitting Time Min ("+string_format(global.emit_time_min/room_speed, 4, 2)+" sec)|
+------|
+&lt;Preset1&gt; Short Fart, Short Interval|
+&lt;Preset2&gt; Long Fart, Short Interval|
+&lt;Preset3&gt; Short Fart, Long Interval|
+&lt;Preset4&gt; Long Fart, Long Interval|
+------|
+Fart Count to Change Image ("+string_format(global.fart_until_changing_img, 1, 0)+")|
+Set Fart Effect Selection Rule ("+ current_selection_rule + ")"
+  ,-1) {
+  
+  case item1: // interval max
+    tmp = real(get_string("Fart Interval MAX [sec]:", string(global.emit_interval_max/room_speed)));
+    tmp = min( max( tmp, global.emit_interval_min/room_speed ), TIME_MAX);
+    global.emit_interval_max = tmp*room_speed;
+
+  break;
+
+  case item1+1: // interval min
+    tmp = real(get_string("Fart Interval MIN [sec]:", string(global.emit_interval_min/room_speed)));
+    tmp = min( max( tmp, TIME_MIN ), global.emit_interval_max/room_speed);
+    global.emit_interval_min = tmp*room_speed;
+
+  break;
+  
+  case item1+2: // emit max
+    tmp = real(get_string("Fart Emitting Time MAX [sec]:", string(global.emit_time_max/room_speed)));
+    tmp = min( max( tmp, global.emit_time_min/room_speed ), TIME_MAX);
+    global.emit_time_max = tmp*room_speed;
+
+  break;
+  
+  case item1+3: // emit min
+    tmp = real(get_string("Fart Emitting Time MIN [sec]:", string(global.emit_time_min/room_speed)));
+    tmp = min( max( tmp, TIME_MIN ), global.emit_time_max/room_speed);
+    global.emit_time_min = tmp*room_speed;
+
+  break;
+  
+  case item2: // 小さいのを素早く連発
+  global.emit_interval_min = 0.1 * room_speed;
+  global.emit_interval_max = 0.4 * room_speed;
+  global.emit_time_min = 0.02 * room_speed;
+  global.emit_time_max = 0.1 * room_speed;
+  break;
+  
+  case item2+1: // 長いのを連発
+  global.emit_interval_min = 0.3 * room_speed;
+  global.emit_interval_max = 0.6 * room_speed;
+  global.emit_time_min = 1.5 * room_speed;
+  global.emit_time_max = 4.0 * room_speed;
+  
+  break;
+  
+  case item2+2: // 小さいのをゆっくり
+  global.emit_interval_min = 1.5 * room_speed;
+  global.emit_interval_max = 3.0 * room_speed;
+  global.emit_time_min = 0.2 * room_speed;
+  global.emit_time_max = 0.4 * room_speed;
+  
+  break;
+  
+  case item2+3: // 長いのをゆっくり
+  global.emit_interval_min = 2.0 * room_speed;
+  global.emit_interval_max = 5.0 * room_speed;
+  global.emit_time_min = 3.0 * room_speed;
+  global.emit_time_max = 5.0 * room_speed;
+  
+  break;
+  
+  case item3: // fart count
+    tmp = real(get_string("Fart Count to Change Image:", string(global.fart_until_changing_img)));
+    tmp = min( max( tmp, 1 ), 100);
+    global.fart_until_changing_img = tmp;
+
+  break;
+
+  case item3+1: // effect selection rule
+    tmp = real(show_message_ext("Effect Selection Rule:", "Random", "All Random", "Single"));
+    if( tmp == 1 ) current_selection_rule = "Random";
+    else if( tmp == 2 ) current_selection_rule = "AllRandom";
+    else current_selection_rule = "Single";
+ 
+  default:
+  break;
+  
+}
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">show_debug_message("obj_sound_container created!");
+
+// ファイル読み込み？
+global.list_sound_small   = ds_list_create();
+global.list_sound_medium  = ds_list_create();
+global.list_sound_big     = ds_list_create();
+global.list_sound_huge    = ds_list_create();
+global.list_sound_sneaky  = ds_list_create();
+global.list_sound_special = ds_list_create();
+
+load_sounds(".\sound\small", global.list_sound_small);
+load_sounds(".\sound\medium", global.list_sound_medium);
+load_sounds(".\sound\big", global.list_sound_big);
+load_sounds(".\sound\huge", global.list_sound_huge);
+load_sounds(".\sound\sneaky", global.list_sound_sneaky);
+load_sounds(".\sound\special", global.list_sound_special);
+
+
+map_listind_to_string = ds_map_create();
+ds_map_add(map_listind_to_string, global.list_sound_small, "Small");
+ds_map_add(map_listind_to_string, global.list_sound_medium, "Medium");
+ds_map_add(map_listind_to_string, global.list_sound_big, "Big");
+ds_map_add(map_listind_to_string, global.list_sound_huge, "Huge");
+ds_map_add(map_listind_to_string, global.list_sound_sneaky, "Sneaky");
+ds_map_add(map_listind_to_string, global.list_sound_special, "Special");
+
+// その他オリジナルのサウンドグループを保存
+var i;
+for(i=0; i&lt;ORIGINAL_SOUND_MAX; i+=1){
+    global.list_sound_original[i] = ds_list_create();
+    load_sounds(".\sound\original"+string(i+1), global.list_sound_original[i]);
+    ds_map_add(map_listind_to_string, global.list_sound_original[i], "Orig"+string(i+1));
+}
+
+// mode*pattern_max + patternに対応したsound（play_goundの引数）を保存するリスト
+list_modpat_sound = ds_list_create();
+
+var ind;
+prev_farting_time = 0;
+
+// ボタンの位置
+index = 6;
+
+// 最後に再生した音声のハンドラ
+global.prev_fart_sound = -1;
+
+// デフォルトのサウンド設定 0:small, 1:medium, 2:big, 3:huge, 4:sneaky, 5:special
+// mode = 0(shot), pattern = 0 ... PATTERN_MAX
+ds_list_add(list_modpat_sound, global.list_sound_small); // 0
+ds_list_add(list_modpat_sound, global.list_sound_small);
+ds_list_add(list_modpat_sound, global.list_sound_medium);
+ds_list_add(list_modpat_sound, global.list_sound_medium);
+ds_list_add(list_modpat_sound, global.list_sound_medium);
+ds_list_add(list_modpat_sound, global.list_sound_big); // 5
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky); // 9
+
+// mode = 1(mist), pattern = 0 ... PATTERN_MAX
+ds_list_add(list_modpat_sound, global.list_sound_medium); // 0
+ds_list_add(list_modpat_sound, global.list_sound_big);
+ds_list_add(list_modpat_sound, global.list_sound_small);
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_medium); // 5
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_big); // 9
+
+// mode = 2
+ds_list_add(list_modpat_sound, global.list_sound_sneaky); // 0
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_medium);
+ds_list_add(list_modpat_sound, global.list_sound_big);
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_medium); // 5
+ds_list_add(list_modpat_sound, global.list_sound_big);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky); // 9
+
+// mode = 3(burst), pattern = 0 ... PATTERN_MAX
+ds_list_add(list_modpat_sound, global.list_sound_medium); // 0
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky); //5
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_huge); // 9
+
+
+// mode = 4(experiment), pattern = 0 ... PATTERN_MAX
+ds_list_add(list_modpat_sound, global.list_sound_special); // 0
+ds_list_add(list_modpat_sound, global.list_sound_special);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_huge); // 5
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_huge);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky);
+ds_list_add(list_modpat_sound, global.list_sound_sneaky); // 9
+
+
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

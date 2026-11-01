@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="604" library="1">
+      <!--action name: Inherited-->
+      <kind>NORMAL</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>false</canApplyTo>
+      <actionType>FUNCTION</actionType>
+      <functionName>action_inherited</functionName>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments/>
+    </action>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">var i, fname;
+i=0;
+
+
+// file name list
+fname_list = ds_list_create();
+
+// 背景透過モード使用フラグ
+touka = false;
+
+
+//bkg_index_max = i;
+bkg_index_max = load_image_names(fname_list);
+
+
+global.cur_bkg_index = 0;
+fname = ds_list_find_value(fname_list, global.cur_bkg_index);
+background_index[0] = load_new_image(fname, touka);
+/*
+// データベースにファイル名があれば、HipHoleを自動設定
+fname = filename_name(string(fname));
+if( ds_hh_findname(fname) != -1 ){
+  global.hip_hole_x[global.cur_bkg_index] = real(ds_hh_getx(fname));
+  global.hip_hole_y[global.cur_bkg_index] = real(ds_hh_gety(fname));
+}
+*/
+
+// ボタンの表示位置
+index = 2;
+
+global.global_mouse_available = true;
+
+global.img_scale = 1.0;
+
+// 背景画像のリスト作成
+bkg_image_list = ds_list_create();
+load_image_names_to_list(bkg_image_list, ".\background");
+
+global.cur_bkg_image = 0;
+background_index[1] = background_add(ds_list_find_value( bkg_image_list, global.cur_bkg_image), false, false);
+
+background_htiled[1] = false;
+background_vtiled[1] = false;
+
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

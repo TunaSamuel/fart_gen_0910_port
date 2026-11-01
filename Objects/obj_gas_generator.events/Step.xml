@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">global.target_x = mouse_x;
+global.target_y = mouse_y;
+
+// エミッタの場所更新 必要なら生成
+if( ! part_emitter_exists(ps, hip_em)){
+    hip_em = part_emitter_create(ps);
+}
+
+// HIP HOLEの指定
+var hipx, hipy;
+hipx = global.hip_hole_x[global.cur_bkg_index] + background_x[0];
+hipy = global.hip_hole_y[global.cur_bkg_index] + background_y[0];
+
+part_emitter_region(ps, hip_em, hipx-1, hipx+1, hipy-1, hipy+1, ps_shape_rectangle, ps_distr_linear);
+
+// EXTRA HIP HOLEが存在する場合はそっちも更新
+for( i=0; i&lt;EXTRA_HIP_HOLE_MAX; i+=1){
+     hipx = global.ex_hole_x[i] + background_x[0];
+     hipy = global.ex_hole_y[i] + background_y[0];
+     part_emitter_region(ps, hip_em_ex[i], hipx-1, hipx+1, hipy-1, hipy+1, ps_shape_rectangle, ps_distr_linear);
+}
+
+if( !global.now_setting ) // 尻穴設定中でなければ放屁OK
+{
+    // 入力判定
+    for( i=0; i&lt;GAS_PATTERN_MAX; i+=1){
+       if(keyboard_check_pressed(ord(string(i)))){
+         part_emitter_stream(ps,hip_em,pt_gas_id,0); // 放屁終了
+         emit_particle[i] = true;
+         // test
+         global.current_pattern = i;
+       }else if(keyboard_check_released(ord(string(i)))){
+         emit_particle[i] = false;
+         if( global.farting_time &gt; 0) global.farting_time = 1;
+       }
+    }
+    
+    // 左クリック or Spaceで、最後に発射したパターンを再放出
+    //if(mouse_check_button_pressed(mb_middle) || keyboard_check_pressed(vk_space)){
+    if((global.global_mouse_available &amp;&amp; mouse_check_button_pressed(mb_left) ) ||
+        (global.global_mouse_available &amp;&amp; mouse_check_button_pressed(mb_right) ) ||
+         keyboard_check_pressed(vk_space)){
+        emit_particle[global.current_pattern] = true;
+        part_emitter_stream(ps,hip_em,pt_gas_id,0);
+    }
+    
+    // 左ボタン・Space離した時の処理
+    else if((global.global_mouse_available &amp;&amp; mouse_check_button_released(mb_left)) || keyboard_check_released(vk_space)){
+       emit_particle[global.current_pattern] = false;
+    
+       if( global.farting_time &gt; 0){
+          global.farting_time = 1;
+       }
+    }
+    
+    // 放屁終了後も、音が途切れるまでは放屁し続ける
+    if( global.synchro_mode &amp;&amp; global.farting_time &lt;= 0 &amp;&amp;
+       (isplaying_sound(global.prev_fart_sound) ) )
+    {
+      global.farting_time = 2;
+    }
+}
+
+// ガスパターンチェンジ
+if(keyboard_check_pressed(vk_shift)){
+    global.current_mode += 1;
+    if( global.current_mode == EMIT_MODE_MAX ){ global.current_mode = 0; }
+}
+
+// delキーでガスエフェクト消去
+if( keyboard_check_pressed(vk_delete)){
+    if( global.farting_time &gt; 0) global.farting_time = 1;
+    part_particles_clear(ps);
+    
+    stop_sound();
+    draw_text_on_board("Clear", true);
+}
+
+// 現在のパーティクル数をデバッグメッセージに出力
+//if( global.debug ){
+//  obj_debug_window.debug_message = string(part_particles_count(ps));
+//}
+
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

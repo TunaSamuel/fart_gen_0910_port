@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="STEP" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">var i, hipx, hipy;
+
+// エミッタ位置調整
+part_emitter_region(ps2, extra_em, 
+    mouse_x-background_width[0]/2, mouse_x+background_width[0]/2, 
+    mouse_y-background_height[0]/2, mouse_y+background_height[0]/2, 
+    ps_shape_rectangle, ps_distr_linear);
+
+// アトラクタ位置調整
+hipx = global.hip_hole_x[global.cur_bkg_index];
+hipy = global.hip_hole_y[global.cur_bkg_index];
+part_attractor_position(ps2, extra_at, hipx, hipy);
+
+// 複数同時用アトラクタ位置
+// Destroyerも複数要ることになるので面倒。中止
+/*
+for( i=0; i&lt;EXTRA_HIP_HOLE_MAX; i+=1){
+     hipx = global.ex_hole_x[i];
+     hipy = global.ex_hole_y[i];
+     part_attractor_position(ps2, extra_at_multi[i], hipx, hipy);
+}
+*/
+
+// デストロイヤ設定
+var size, pow;
+size = 10;
+part_destroyer_region(ps2, extra_de, 
+    global.hip_hole_x[global.cur_bkg_index] -size, global.hip_hole_x[global.cur_bkg_index] +size,
+    global.hip_hole_y[global.cur_bkg_index] -size, global.hip_hole_y[global.cur_bkg_index] +size,
+    ps_shape_rectangle);
+
+size = 20*global.gas_speed_scale;
+part_changer_region(ps2, extra_ch1, 
+    global.hip_hole_x[global.cur_bkg_index] -size, global.hip_hole_x[global.cur_bkg_index] +size,
+    global.hip_hole_y[global.cur_bkg_index] -size, global.hip_hole_y[global.cur_bkg_index] +size,
+    ps_shape_rectangle);
+part_changer_region(ps2, extra_ch2, 
+    global.hip_hole_x[global.cur_bkg_index] -size, global.hip_hole_x[global.cur_bkg_index] +size,
+    global.hip_hole_y[global.cur_bkg_index] -size, global.hip_hole_y[global.cur_bkg_index] +size,
+    ps_shape_rectangle);
+part_changer_region(ps2, extra_ch3, 
+    global.hip_hole_x[global.cur_bkg_index] -size, global.hip_hole_x[global.cur_bkg_index] +size,
+    global.hip_hole_y[global.cur_bkg_index] -size, global.hip_hole_y[global.cur_bkg_index] +size,
+    ps_shape_rectangle);
+
+size = 10*global.gas_speed_scale;
+part_changer_region(ps2, extra_ch4, 
+    global.hip_hole_x[global.cur_bkg_index] -size, global.hip_hole_x[global.cur_bkg_index] +size,
+    global.hip_hole_y[global.cur_bkg_index] -size, global.hip_hole_y[global.cur_bkg_index] +size,
+    ps_shape_rectangle);
+
+if( emit_soul || emit_air ){
+  // アトラクタのパワー設定
+  part_attractor_force(ps2, extra_at, 0.25 * global.gas_speed_scale, 
+    max(background_width[0], background_height[0]), ps_force_constant, true);
+/*
+  // Extra穴用アトラクタ。面倒なので中止
+  for(i=0; i&lt;global.ex_hole_num; i+=1){
+    if( i &lt; global.ex_hole_num ){
+      pow = 0.13 * global.gas_speed_scale; 
+    }else{
+      pow = 0;
+    }
+    part_attractor_force(ps2, extra_at_multi[i], pow, 
+        max(background_width[0], background_height[0]), ps_force_constant, true);
+  }
+*/
+}
+
+if( keyboard_check(vk_control) &amp;&amp; keyboard_check_pressed(vk_f12) ){
+  emit_soul = !emit_soul;
+  if( emit_soul )  obj_debug_window.debug_message = "SOUL DRAIN!!";
+}
+
+if( keyboard_check_pressed(vk_backspace)){
+  emit_air = true;
+  obj_debug_window.debug_message = "VACUUM!!";
+  sound_play(snd_vacuum);
+}else if( keyboard_check(vk_backspace) ){
+  if( random(100) &lt; (global.gas_speed_scale+global.gas_num_scale) ) sound_play(snd_vacuum);
+}else{
+  emit_air = false
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>

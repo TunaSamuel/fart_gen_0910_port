@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="KEYPRESS" id="113">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">var fname;
+
+fname = get_directory_alt("Select Image Directory", global.ini_image_dir);
+if( fname != "") global.image_dir = fname;
+
+event_perform( ev_other, ev_user10 );
+/*
+// file name list
+ds_list_clear(fname_list);
+
+//bkg_index_max = i;
+bkg_index_max = load_image_names(fname_list);
+
+global.cur_bkg_index = 0;
+//background_index[0] = load_new_image(ds_list_find_value(fname_list, global.cur_bkg_index));
+fname = ds_list_find_value(fname_list, global.cur_bkg_index)
+background_index[0] = load_new_image(fname, touka);//background_add(fname, touka, false);
+
+fit_window_size_to_image( background_index[0], 1 );
+global.img_scale = 1.0;
+
+// データベースにファイル名があれば、HipHoleを自動設定
+fname = filename_name(string(fname));
+if( ds_hh_findname(fname) != -1 ){
+  global.hip_hole_x[global.cur_bkg_index] = real(ds_hh_getx(fname));
+  global.hip_hole_y[global.cur_bkg_index] = real(ds_hh_gety(fname));
+}
+*/
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>
