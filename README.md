@@ -6,7 +6,9 @@ gas clouds towards the mouse, complete with sound, shake, zooming and 50 fart
 patterns.
 
 Open `project.godot` in Godot 4.4+ (developed and verified against 4.4.1) and
-press Play. The original GameMaker source folders (`Objects/`, `Scripts/`,
+press Play. A fresh clone runs straight away too: scripts preload each other
+explicitly instead of relying on the editor's class cache, and images/UI
+sprites are decoded from their raw files. The original GameMaker source folders (`Objects/`, `Scripts/`,
 `Sprites/`, …) are kept in the repository for reference and are excluded from
 Godot's import scan with `.gdignore` files.
 

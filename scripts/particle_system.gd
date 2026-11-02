@@ -10,6 +10,11 @@ extends Node2D
 ## at a fixed 60 Hz so motion stays smooth on modern displays; conversion
 ## happens when a particle is spawned (see SPAWN_* constants).
 
+# Explicit preloads: keeps the scripts parseable on a fresh checkout before
+# Godot's editor has built its global class cache.
+const ParticleType := preload("res://scripts/particle_type.gd")
+const ShapeTextures := preload("res://scripts/shape_textures.gd")
+
 const MAX_PARTICLES := 14000
 const STEPS_PER_SECOND := 60.0
 const STEP_TIME := 1.0 / STEPS_PER_SECOND

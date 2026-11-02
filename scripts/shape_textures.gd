@@ -6,6 +6,10 @@ extends RefCounted
 ## so equivalent white sprites are generated procedurally here. They are tinted
 ## per particle, exactly like the originals.
 
+# Explicit preload: works on a fresh checkout before Godot's editor has
+# generated its global class cache.
+const ParticleType := preload("res://scripts/particle_type.gd")
+
 const SIZE := 64
 
 static var _cache: Dictionary = {}

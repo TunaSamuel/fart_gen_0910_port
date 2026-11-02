@@ -6,6 +6,10 @@ extends CanvasLayer
 
 signal color_changed(col1: Color, col2: Color)
 
+# Explicit preload: keeps the script parseable on a fresh checkout before
+# Godot's editor has built its global class cache.
+const FartButton := preload("res://scripts/fart_button.gd")
+
 const DEFAULT_COLOR_1 := Color8(220, 188, 48)
 const DEFAULT_COLOR_2 := Color8(225, 228, 155)
 

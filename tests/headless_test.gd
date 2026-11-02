@@ -4,6 +4,12 @@ extends Node
 ##   godot --headless --path . res://tests/headless_test.tscn
 ## It boots the real main scene, fires every pattern and checks the systems.
 
+# Explicit preloads: resolution does not depend on the editor's class cache.
+const GasGenerator := preload("res://scripts/gas_generator.gd")
+const ParticleSystem := preload("res://scripts/particle_system.gd")
+const SettingsStore := preload("res://scripts/settings_store.gd")
+const WavLoader := preload("res://scripts/wav_loader.gd")
+
 var failures := 0
 var main: Node
 

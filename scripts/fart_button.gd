@@ -4,6 +4,10 @@ extends Button
 ## The original's window-sprite button: left click activates, right click
 ## decrements, middle click opens a value prompt and the wheel nudges.
 
+# Explicit preload: works on a fresh checkout before Godot's editor has
+# generated its global class cache.
+const ImageLibrary := preload("res://scripts/image_library.gd")
+
 signal right_pressed
 signal middle_pressed
 signal wheeled(direction: int)
@@ -35,7 +39,7 @@ func _ready() -> void:
 
 
 func _make_style(path: String, tint: Color) -> StyleBox:
-	var tex := load(path) as Texture2D
+	var tex: Texture2D = ImageLibrary.load_texture(path)
 	if tex != null:
 		var sb := StyleBoxTexture.new()
 		sb.texture = tex

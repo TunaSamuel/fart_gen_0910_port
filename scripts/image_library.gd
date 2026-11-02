@@ -4,6 +4,10 @@ extends RefCounted
 ## Scans the image folders and loads textures at runtime, mirroring
 ## load_image_names() / load_new_image() from the original.
 
+# Explicit preload: works on a fresh checkout before Godot's editor has
+# generated its global class cache.
+const Content := preload("res://scripts/content.gd")
+
 var directory: String = ""
 var recursive: bool = false
 var files: Array[String] = []

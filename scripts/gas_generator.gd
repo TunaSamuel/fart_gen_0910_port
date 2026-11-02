@@ -4,6 +4,11 @@ extends Node2D
 ## Port of obj_gas_generator: particle type setup, the 5x10 fart pattern table
 ## and the emission loop.
 
+# Explicit preloads: keeps the scripts parseable on a fresh checkout before
+# Godot's editor has built its global class cache.
+const ParticleSystem := preload("res://scripts/particle_system.gd")
+const ParticleType := preload("res://scripts/particle_type.gd")
+
 signal fart_started
 signal pattern_changed
 

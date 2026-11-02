@@ -5,6 +5,10 @@ extends RefCounted
 ## FartGenerator.sav hole-position database. Both now live in one ConfigFile
 ## under user://.
 
+# Explicit preload: works on a fresh checkout before Godot's editor has
+# generated its global class cache.
+const Content := preload("res://scripts/content.gd")
+
 const CONFIG_PATH := "user://fart_generator.cfg"
 
 var image_dir: String = ""

@@ -10,6 +10,12 @@ extends Node
 ##   sound/voice1 .. sound/voiceN
 ##   sound/sfx (hip press / vacuum from the original game)
 
+# Explicit preloads: keeps the scripts parseable on a fresh checkout before
+# Godot's editor has built its global class cache.
+const Content := preload("res://scripts/content.gd")
+const SynthFart := preload("res://scripts/synth_fart.gd")
+const WavLoader := preload("res://scripts/wav_loader.gd")
+
 const PLAYER_POOL := 24
 const BASE_GROUPS := ["Small", "Medium", "Big", "Huge", "Sneaky", "Special"]
 const ORIGINAL_GROUPS := 5

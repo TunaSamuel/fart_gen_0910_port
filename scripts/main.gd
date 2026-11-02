@@ -5,6 +5,14 @@ extends Node2D
 ## Handles image browsing, hole placement, the camera (the original's variable
 ## size view), auto fire / slideshow, sound selection and the UI wiring.
 
+# Preloaded explicitly so a fresh checkout runs before Godot's editor has
+# generated its global class cache (.godot/global_script_class_cache.cfg).
+const GasGenerator := preload("res://scripts/gas_generator.gd")
+const ImageLibrary := preload("res://scripts/image_library.gd")
+const SettingsStore := preload("res://scripts/settings_store.gd")
+const SoundBank := preload("res://scripts/sound_bank.gd")
+const UiPanel := preload("res://scripts/ui_panel.gd")
+
 const IMAGE_SCALE_MIN := 0.8
 const IMAGE_SCALE_MAX := 4.0
 const EXTRA_HIP_HOLE_MAX := 9
@@ -166,10 +174,9 @@ func _make_placeholder() -> void:
 
 
 func _load_optional_texture(path: String) -> Texture2D:
-	var tex := load(path)
-	if tex is Texture2D:
-		return tex
-	return null
+	# Decoded from the raw PNG at runtime, so the UI sprites work even when the
+	# project has not been opened in the editor (no imported .ctex yet).
+	return ImageLibrary.load_texture(path)
 
 
 func _connect_ui() -> void:
