@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="KEYPRESS" id="84">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">var old, ind;
+
+global.cur_bkg_image += 1;
+
+if( ds_list_size( bkg_image_list ) &lt;= global.cur_bkg_image ){
+    global.cur_bkg_image = 0;
+}
+
+ind = background_add(ds_list_find_value( bkg_image_list, global.cur_bkg_image), false, false);
+
+old = background_index[1];
+background_index[1] = ind;
+
+if(  background_exists( old ) &amp;&amp; old != ind ){
+    background_delete( old );
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>
