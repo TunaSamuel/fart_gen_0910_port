@@ -23,6 +23,9 @@ var shake_speed: float = 1.0
 var shake_synchro: bool = true
 var foreground_mode: bool = false
 var voice_max: int = 5
+## Big farts (Huge/Big groups) get bigger particles, wider spread and harder
+## shake than small ones.
+var rank_scaling: bool = true
 
 var auto_change_image: bool = false
 var selection_rule: String = "Random"  # Random | AllRandom | Single
@@ -31,6 +34,13 @@ var emit_interval_max: float = 3.0
 var emit_time_min: float = 1.0
 var emit_time_max: float = 2.0
 var fart_until_changing_img: int = 3
+
+# Graphics (applied by the App autoload; see scripts/app.gd).
+var resolution := Vector2i(1280, 720)
+var aspect := "Fit image"
+var fullscreen := false
+var borderless := false
+var vsync := true
 
 var _holes: Dictionary = {}
 var _cfg := ConfigFile.new()
@@ -52,6 +62,13 @@ func load_settings() -> void:
 	shake_synchro = bool(_cfg.get_value("general", "shake_synchro", true))
 	foreground_mode = bool(_cfg.get_value("general", "foreground_mode", false))
 	voice_max = int(_cfg.get_value("general", "voice_max", 5))
+	rank_scaling = bool(_cfg.get_value("general", "rank_scaling", true))
+
+	resolution = Vector2i(_cfg.get_value("graphics", "width", 1280), _cfg.get_value("graphics", "height", 720))
+	aspect = String(_cfg.get_value("graphics", "aspect", "Fit image"))
+	fullscreen = bool(_cfg.get_value("graphics", "fullscreen", false))
+	borderless = bool(_cfg.get_value("graphics", "borderless", false))
+	vsync = bool(_cfg.get_value("graphics", "vsync", true))
 
 	auto_change_image = bool(_cfg.get_value("autofire", "auto_change_image", false))
 	selection_rule = String(_cfg.get_value("autofire", "selection_rule", "Random"))
@@ -82,6 +99,14 @@ func save_settings() -> void:
 	_cfg.set_value("general", "shake_synchro", shake_synchro)
 	_cfg.set_value("general", "foreground_mode", foreground_mode)
 	_cfg.set_value("general", "voice_max", voice_max)
+	_cfg.set_value("general", "rank_scaling", rank_scaling)
+
+	_cfg.set_value("graphics", "width", resolution.x)
+	_cfg.set_value("graphics", "height", resolution.y)
+	_cfg.set_value("graphics", "aspect", aspect)
+	_cfg.set_value("graphics", "fullscreen", fullscreen)
+	_cfg.set_value("graphics", "borderless", borderless)
+	_cfg.set_value("graphics", "vsync", vsync)
 
 	_cfg.set_value("autofire", "auto_change_image", auto_change_image)
 	_cfg.set_value("autofire", "selection_rule", selection_rule)

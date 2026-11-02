@@ -5,6 +5,10 @@ to **Godot 4**. Load a picture, click where the "hole" is, and the picture emits
 gas clouds towards the mouse, complete with sound, shake, zooming and 50 fart
 patterns.
 
+There is a title screen (`Play` / `Options` / `Quit`) in front of the game, and
+an options menu for resolution, aspect ratio, fullscreen and the rank-based size
+rules, reachable from the title or with `F1` in game.
+
 Open `project.godot` in Godot 4.4+ (developed and verified against 4.4.1) and
 press Play. A fresh clone runs straight away too: scripts preload each other
 explicitly instead of relying on the editor's class cache, and images/UI
@@ -64,7 +68,9 @@ resource imports of those folders still works.
 | `T` | cycle the overlay background |
 | `F2` | choose the image folder |
 | `V` / `Ctrl`+`V` | play voice / next voice |
-| `Esc` | quit (settings and hole positions are saved) |
+| `F1` | options (graphics, gameplay) |
+| `K` | bigger farts are bigger: rank-based size on/off |
+| `Esc` | back to the title screen (settings and hole positions are saved) |
 
 Buttons behave like the original's: **left** click increments/activates,
 **right** click decrements, **middle** click prompts for a numeric value, and
@@ -93,6 +99,15 @@ apply a custom two-colour gradient to every particle type.
   with image changing, transparency "foreground" mode.
 * Saving: hole positions per image file name, extra holes, and the option
   values (replaces `FartGenerator.ini` + `FartGenerator.sav`).
+* **Rank-based size**: a fart's rank comes from its sound group (`Small` 1,
+  `Sneaky`/`Medium` 2, `Big`/`Special` 3, `Huge` 4) and drives starting
+  particle size, growth, spread and shake strength, so a `Huge` fart fills the
+  screen while a `Small` one stays a squeak. Toggle with `K` or in Options.
+* **Locked aim**: the aim point is captured when a burst starts, so the gas
+  keeps flying where you clicked instead of chasing the mouse.
+* **Title screen and options**: resolution, aspect ratio (including the
+  original's "fit the image" behaviour), fullscreen, borderless window,
+  V-Sync and the gameplay toggles, applied instantly and saved.
 
 Not ported, because they depend on Windows-only DLLs or are debug toys:
 
@@ -140,12 +155,15 @@ checks there first (`Content.root()`).
 ## Tests
 
 A headless smoke test boots the real scene, fires all 50 patterns, checks the
-WAV reader, particle cap, settings persistence, camera and sound bank:
+WAV reader, particle cap, settings persistence, camera, aim locking, rank
+scaling and the sound bank:
 
 ```
 godot --headless --path . res://tests/headless_test.tscn
+godot --headless --path . res://tests/ui_test.tscn
 ```
 
-It exits non-zero on failure. All checks currently pass. Rendering and audio
+The second one covers the title screen, the options menu and the graphics
+hand-off. Both exit non-zero on failure. All checks currently pass. Rendering and audio
 output could not be inspected in the headless build environment (no display),
 so the visual result should be checked once in the Godot editor.

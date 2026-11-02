@@ -7,17 +7,21 @@ config_version=5
 
 config/name="Fart Generator"
 config/description="Load an image, pick the hole, and let it rip."
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/title.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 boot_splash/show_image=false
 
+[autoload]
+
+App="*res://scripts/app.gd"
+
 [display]
 
 window/size/viewport_width=1280
-window/size/viewport_height=800
+window/size/viewport_height=720
 window/size/window_width_override=1280
-window/size/window_height_override=800
+window/size/window_height_override=720
 window/size/resizable=true
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"

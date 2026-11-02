@@ -88,6 +88,42 @@ func _ready() -> void:
 	main._reset_colors()
 	check(main.gas.ps.alive_count() > 0, "emits while reversed with blend")
 
+	# Aim is locked when a burst starts: moving the mouse afterwards must not
+	# change the direction the gas was fired in.
+	# Detach the image for a moment so main._process stops syncing the cursor
+	# position into the generator (headless has no usable mouse).
+	var saved_texture: Texture2D = main.texture
+	main.texture = null
+	main.gas.clear_all()
+	main.gas.aim_valid = false
+	main.gas.current_mode = 0
+	main.gas.current_pattern = 0
+	main.gas.hole_position = Vector2(100, 100)
+	main.gas.target = Vector2(600, 100)
+	main.gas.press_pattern(0)
+	for i in 4:
+		await get_tree().process_frame
+	var locked_aim: Vector2 = main.gas.aim_point
+	main.gas.target = Vector2(100, 700)
+	for i in 4:
+		await get_tree().process_frame
+	check(main.gas.aim_valid and main.gas.aim_point == locked_aim, "aim locked at burst start", str(locked_aim))
+	check(locked_aim.is_equal_approx(Vector2(600, 100)), "aim captured the click position", str(locked_aim))
+	main.gas.release_pattern(0)
+	main.texture = saved_texture
+
+	# Rank scaling: Huge farts spawn bigger particles than Small ones.
+	main.gas.rank_scaling = true
+	main.gas.rank = int(GasGenerator.RANK_BY_GROUP["Huge"])
+	var huge_size: float = main.gas._base_size()
+	main.gas.rank = int(GasGenerator.RANK_BY_GROUP["Small"])
+	var small_size: float = main.gas._base_size()
+	main.gas.rank_scaling = false
+	var flat_size: float = main.gas._base_size()
+	check(huge_size > small_size * 1.8, "rank scales particle size", "huge=%.2f small=%.2f" % [huge_size, small_size])
+	check(is_equal_approx(flat_size, 0.25), "rank scaling off keeps the old size", "flat=%.2f" % flat_size)
+	main.gas.rank_scaling = main.settings.rank_scaling
+
 	# Auto fire and slideshow state machines.
 	main._toggle_auto_fire()
 	main._toggle_auto_change_image()

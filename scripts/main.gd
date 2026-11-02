@@ -12,6 +12,7 @@ const ImageLibrary := preload("res://scripts/image_library.gd")
 const SettingsStore := preload("res://scripts/settings_store.gd")
 const SoundBank := preload("res://scripts/sound_bank.gd")
 const UiPanel := preload("res://scripts/ui_panel.gd")
+const OptionsScreen := preload("res://scripts/options_screen.gd")
 
 const IMAGE_SCALE_MIN := 0.8
 const IMAGE_SCALE_MAX := 4.0
@@ -42,6 +43,7 @@ var bg_sprite: Sprite2D
 var overlay_sprite: Sprite2D
 var camera: Camera2D
 
+var _options: CanvasLayer
 var texture: Texture2D
 var image_size := Vector2(1024, 768)
 var marker_tex: Texture2D
@@ -90,8 +92,14 @@ var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	_rng.randomize()
-	settings = SettingsStore.new()
-	settings.load_settings()
+	# The App autoload owns the settings so the title screen and the game share
+	# one instance; fall back to a private copy when running standalone.
+	var app := get_node_or_null("/root/App")
+	if app != null:
+		settings = app.settings
+	else:
+		settings = SettingsStore.new()
+		settings.load_settings()
 
 	for i in EMIT_MODE_MAX:
 		sound_map.append((SOUND_MAP[i] as Array).duplicate())
@@ -119,6 +127,7 @@ func _ready() -> void:
 
 	gas = GasGenerator.new()
 	gas.name = "GasGenerator"
+	gas.rank_scaling = settings.rank_scaling
 	world.add_child(gas)
 
 	camera = Camera2D.new()
@@ -404,7 +413,7 @@ func _update_camera() -> void:
 	var zoom_mul := 1.0
 	if shake_timer > 0.0 and shake_mode != 0 and settings.shake > 0.0:
 		var t := shake_phase
-		var amp := settings.shake * 0.6
+		var amp := settings.shake * 0.6 * gas.rank_factor()
 		var s := sin(t * settings.shake_speed * 22.0)
 		var s2 := sin(t * settings.shake_speed * 17.0 + 1.7)
 		match shake_mode:
@@ -502,6 +511,12 @@ func _handle_key(event: InputEventKey) -> bool:
 			gas.reverse_shot = not gas.reverse_shot
 			ui.show_status("Fart Direction [Reverse]" if gas.reverse_shot else "Fart Direction [Normal]", 1.4)
 			return true
+		KEY_K:
+			settings.rank_scaling = not settings.rank_scaling
+			gas.rank_scaling = settings.rank_scaling
+			_refresh_ui()
+			ui.show_status("Bigger farts are bigger [On]" if settings.rank_scaling else "Size by rank [Off]", 1.6)
+			return true
 		KEY_W:
 			_cycle_shake(1)
 			return true
@@ -555,7 +570,10 @@ func _handle_key(event: InputEventKey) -> bool:
 			_zoom_step(-0.1 if not Input.is_key_pressed(KEY_CTRL) else -0.05)
 			return true
 		KEY_ESCAPE:
-			_quit()
+			_back_to_title()
+			return true
+		KEY_F1:
+			_toggle_options()
 			return true
 	return false
 
@@ -939,7 +957,12 @@ func _refresh_ui() -> void:
 		ui.set_button_text("auto_fire", ui.button("auto_fire").text + " (SS)")
 	ui.set_button_text("fart_id", "Fart ID: %d-%d" % [gas.current_mode + 1, gas.current_pattern])
 	var group: String = sound_map[gas.current_mode][gas.current_pattern]
-	ui.set_button_text("se", "SE: " + group + (" (empty)" if sound.group_is_empty(group) else ""))
+	# The sound group doubles as the fart's rank, which drives size, spread and
+	# shake (see GasGenerator.RANK_BY_GROUP).
+	gas.rank = int(GasGenerator.RANK_BY_GROUP.get(group, 2))
+	gas.rank_scaling = settings.rank_scaling
+	var rank_mark := " x%d" % gas.rank if settings.rank_scaling else ""
+	ui.set_button_text("se", "SE: " + group + rank_mark + (" (empty)" if sound.group_is_empty(group) else ""))
 	ui.set_button_text("voice", "Voice: " + ("Off" if current_voice == 0 else str(current_voice)))
 	ui.set_button_text("size", "Size  x%.2f" % gas.gas_size_scale)
 	ui.set_button_text("num", "Num   x%.2f" % gas.gas_num_scale)
@@ -982,10 +1005,22 @@ func _on_prompt_confirmed() -> void:
 		_prompt_cb.call(_prompt_edit.text.to_float())
 
 
-func _quit() -> void:
+func _back_to_title() -> void:
 	_save_hole()
 	settings.save_settings()
-	get_tree().quit()
+	gas.clear_all()
+	get_tree().change_scene_to_file("res://scenes/title.tscn")
+
+
+func _toggle_options() -> void:
+	if _options != null and is_instance_valid(_options):
+		_options.queue_free()
+		_options = null
+		return
+	_options = OptionsScreen.new()
+	_options.name = "Options"
+	_options.closed.connect(func() -> void: _options = null)
+	add_child(_options)
 
 
 func _notification(what: int) -> void:

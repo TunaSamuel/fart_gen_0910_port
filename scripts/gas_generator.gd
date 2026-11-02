@@ -15,6 +15,19 @@ signal pattern_changed
 const GAS_PATTERN_MAX := 10
 const EMIT_MODE_MAX := 5
 const EXTRA_HIP_HOLE_MAX := 9
+
+## How big a fart is, taken from its sound group (Small .. Huge). Rank 1 is a
+## timid squeak, rank 4 a screen-filling monster.
+const RANK_BY_GROUP := {
+	"Small": 1,
+	"Sneaky": 2,
+	"Medium": 2,
+	"Big": 3,
+	"Special": 3,
+	"Huge": 4,
+}
+const RANK_MIN := 1
+const RANK_MAX := 4
 const ETERNAL := 360000.0           # frames, ~3.3 hours at 30 Hz
 const BURST_THRESH := 3600.0
 const FRAME_TIME := 1.0 / 30.0      # original game speed
@@ -47,6 +60,16 @@ var gas_num_scale := 2.0
 var gas_speed_scale := 2.0
 var gas_amount_scale := 1.0
 var img_scale := 1.0
+
+## Rank of the pattern being fired (see RANK_BY_GROUP), and whether rank affects
+## particle size, growth, spread and shake.
+var rank := 2
+var rank_scaling := true
+
+## Where the current fart was aimed. Captured when a burst starts so the gas
+## keeps flying where you clicked instead of chasing the mouse.
+var aim_point := Vector2.ZERO
+var aim_valid := false
 
 var farting_time := 0.0
 var current_mode := 0
@@ -97,6 +120,11 @@ func _process(delta: float) -> void:
 
 func _tick() -> void:
 	var check := _any_emit()
+	if check:
+		# Lock the aim for the whole burst: the gas flies where you clicked and
+		# does not follow the mouse afterwards.
+		aim_point = target
+		aim_valid = true
 	_apply_pattern(check)
 	if check:
 		fart_started.emit()
@@ -169,10 +197,44 @@ func _add(key: String, count: float) -> void:
 	_pending.append([key, count])
 
 
+## 1.0 when rank scaling is off, otherwise a mild size/spread/shake weight.
+func rank_factor() -> float:
+	if not rank_scaling:
+		return 1.0
+	return 0.7 + 0.15 * float(clampi(rank, RANK_MIN, RANK_MAX))
+
+
+func _spread_factor() -> float:
+	if not rank_scaling:
+		return 1.0
+	return 0.9 + 0.05 * float(clampi(rank, RANK_MIN, RANK_MAX))
+
+
+## Starting particle size. Huge farts spawn fat clouds, small ones thin puffs.
+func _base_size() -> float:
+	if not rank_scaling:
+		return 0.25
+	return 0.16 + 0.13 * float(clampi(rank, RANK_MIN, RANK_MAX))
+
+
+func _growth_factor() -> float:
+	if not rank_scaling:
+		return 1.0
+	return 0.75 + 0.12 * float(clampi(rank, RANK_MIN, RANK_MAX))
+
+
+func _count_factor() -> float:
+	if not rank_scaling:
+		return 1.0
+	return 0.9 + 0.05 * float(clampi(rank, RANK_MIN, RANK_MAX))
+
+
 func _dir(key: String, base: float, spread: float) -> void:
 	var t: ParticleType = ps.type_at(types[key])
-	t.dir_min = base - spread
-	t.dir_max = base + spread
+	# Bigger farts (rank) spread a little wider.
+	var s := spread * _spread_factor()
+	t.dir_min = base - s
+	t.dir_max = base + s
 
 
 func _dir_abs(key: String, dmin: float, dmax: float) -> void:
@@ -193,10 +255,11 @@ func _apply_pattern(check: bool) -> void:
 	_ex_range = 0.0
 	# GameMaker directions are counter-clockwise with 0 = right; Godot's y axis
 	# points down, hence the negation.
-	var g := -rad_to_deg((target - hole_position).angle())
+	var aim := aim_point if aim_valid else target
+	var g := -rad_to_deg((aim - hole_position).angle())
 	if reverse_shot:
 		g = fposmod(g + 180.0, 360.0)
-	var sp := hole_position.distance_to(target) * gas_speed_scale * img_scale
+	var sp := hole_position.distance_to(aim) * gas_speed_scale * img_scale
 	var time := 0.0
 
 	match current_mode:
@@ -386,11 +449,12 @@ func _emit() -> void:
 	for entry in _pending:
 		var key: String = entry[0]
 		var t: ParticleType = ps.type_at(types[key])
-		t.size_min = 0.25
-		t.size_max = 0.25
-		t.size_incr = float(type_size_incr.get(key, 0.0)) * gas_size_scale
+		var base_size := _base_size()
+		t.size_min = base_size
+		t.size_max = base_size
+		t.size_incr = float(type_size_incr.get(key, 0.0)) * gas_size_scale * _growth_factor()
 
-		var shot_num: float = float(entry[1]) * gas_num_scale
+		var shot_num: float = float(entry[1]) * gas_num_scale * _count_factor()
 		var every := 0
 		var count := 0
 		if shot_num < 1.0:

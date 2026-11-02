@@ -99,7 +99,7 @@ func _ready() -> void:
 	clear.add_theme_color_override("font_color", Color(0.55, 0.15, 0.15))
 
 	var hint := Label.new()
-	hint.text = "0-9: fart  |  Space/Click: repeat  |  Shift: mode\nWheel: image  Ctrl+Wheel: zoom  Middle-drag: pan\nB: blend  R: reverse  W: shake  F8: foreground  F2: folder"
+	hint.text = "0-9: fart  |  Space/Click: repeat  |  Shift: mode\nWheel: image  Ctrl+Wheel: zoom  Middle-drag: pan\nB: blend  R: reverse  W: shake  K: rank size\nF8: foreground  F2: folder  F1: options  Esc: title"
 	hint.add_theme_font_size_override("font_size", 10)
 	hint.add_theme_color_override("font_color", Color(0.6, 0.65, 0.7))
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
