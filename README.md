@@ -1,20 +1,39 @@
-# Fart Generator — Godot port
+# Fart Generator
 
-A conversion of the decompiled GameMaker 8.1 title *Fart Generator* (`fart_gen`)
-to **Godot 4**. Load a picture, click where the "hole" is, and the picture emits
-gas clouds towards the mouse, complete with sound, shake, zooming and 50 fart
-patterns.
+Fart Generator is a small image toy that lets you load a picture, choose where
+the "hole" is, and emit gas clouds towards the mouse. It includes sound,
+screen shake, zooming, multiple firing modes, and 50 fart patterns.
 
-There is a title screen (`Play` / `Options` / `Quit`) in front of the game, and
-an options menu for resolution, aspect ratio, fullscreen and the rank-based size
-rules, reachable from the title or with `F1` in game.
+This repository contains both the original **GameMaker 8.1** project data and a
+modern **Godot 4** port. The original project was decompiled from the old
+Windows release and is preserved in `_decompilation/` for reference. The Godot
+port is the maintained version and reproduces the original behavior without
+requiring the legacy runtime.
 
-Open `project.godot` in Godot 4.4+ (developed and verified against 4.4.1) and
-press Play. A fresh clone runs straight away too: scripts preload each other
-explicitly instead of relying on the editor's class cache, and images/UI
-sprites are decoded from their raw files. The original GameMaker source folders (`Objects/`, `Scripts/`,
-`Sprites/`, …) are kept in the repository for reference and are excluded from
-Godot's import scan with `.gdignore` files.
+## Which version should I use?
+
+Use the Godot port for normal play and development. Open `project.godot` in
+Godot 4.4 or newer and run the project. It includes a title screen, options
+menu, image loading, particle effects, sound, saving, and all 50 patterns.
+
+The original GameMaker build is kept for archival and comparison purposes. It
+was made with GameMaker 8.1 and uses the legacy DirectDraw graphics API. On
+modern Windows, DirectDraw compatibility or other legacy graphics support may
+need to be enabled through Windows Features, and the executable may need
+Windows compatibility settings. The original build is not the recommended way
+to run the game.
+
+## Repository layout
+
+- `_decompilation/` — original GameMaker 8.1 project data, including GML scripts,
+  objects, rooms, sprites, sounds, fonts, and project settings.
+- `scenes/`, `scripts/`, and `tests/` — the Godot port and its automated checks.
+- `assets/` — sample images, interface graphics, and optional sound folders used
+  by the Godot port.
+- `project.godot` — the Godot project file.
+
+The original resource folders include `.gdignore` files so Godot does not try
+to import the decompiled GameMaker data as part of the port.
 
 ## Content folders
 
@@ -119,14 +138,14 @@ Not ported, because they depend on Windows-only DLLs or are debug toys:
 
 ## Implementation notes
 
-* **Particle engine** (`scripts/particle_system.gd`): GameMaker's 30 Hz frame
+* **Particle engine** (`scripts/particle_system.gd`): the original GameMaker 30 Hz frame
   parameters are converted to a fixed 60 Hz simulation, so motion stays smooth.
   Pattering is drawn with `MultiMesh2D` instances (one per shape/blend pair);
   the six built-in GameMaker particle shapes are generated procedurally
   (`scripts/shape_textures.gd`) since the original bitmaps are not part of the
-  decompile.
+  decompiled project.
 * **Modes/patterns** (`scripts/gas_generator.gd`) is a direct transcription of
-  the `obj_gas_generator` Draw event switch. It ticks at 30 Hz like the
+  the original `obj_gas_generator` Draw event switch. It ticks at 30 Hz like the
   original, so `farting_time` and sound triggering match.
 * **Camera** reproduces the original's variable-size view (`fit_window_size_
   to_image`): the image is letterboxed at 1×, and zooming interpolates the view
